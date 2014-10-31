@@ -4,11 +4,6 @@ class HtmlExtractor
   def initialize(driver)
     @driver = driver
     @pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
-    @struttura_dati = []
-
-    @markerFinePagina = '//*[@id="pagnNextString"]' # deve essere un elemento che garantisce che la pagina sia stata caricata completamente
-    # varia da sito a sito e andrebbe fornito da driver_generator
-
 
     # crea una mappa a partire dal file .json passato
     File.open('strutturaDati.json', 'r') do |leggi|
@@ -16,22 +11,24 @@ class HtmlExtractor
     end
 
     @next_xpath = @struttura_dati[0]
-    @lista_campi_dati = @struttura_dati[1]
+    @marker_fine_pagina = @struttura_dati[1] # deve essere un elemento che garantisce che la pagina sia stata caricata completamente
+    @lista_campi_dati = @struttura_dati[2]
 
 
     # ricerca X, pagina Y
     x = 1
     @lista_campi_dati.each do |ricerca|
       y = 1
+      campo_input = nil
       ricerca.each do |nomeCampo, testoCampo|
         # continua a riempire i campi finché richiesto
         # la variabile element deve essere globale ($) per poter essere vista dall'esterno del blocco precedente
-        $element = @driver.find_element(xpath: "#{nomeCampo}")
-        $element.send_keys "#{testoCampo}"
+        campo_input = @driver.find_element(xpath: "#{nomeCampo}")
+        campo_input.send_keys "#{testoCampo}"
       end
 
       # avvia la ricerca
-      $element.submit
+      campo_input.submit
 
       wait_page_load
 
@@ -43,9 +40,9 @@ class HtmlExtractor
 
         # salva il codice html della pagina Y della ricerca X nel file:
         # file_rXpY.html
-        htmlSource = @driver.page_source
+        html_source = @driver.page_source
         File.open('file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
-          scrivi << htmlSource
+          scrivi << html_source
         end
 
         y += 1 # incrementa il numero di pagina
@@ -70,6 +67,8 @@ class HtmlExtractor
   # rilanciato ricorsivamente finché la pagina non presenta più cambiamenti
   def click(button)
     begin
+      wait = Selenium::WebDriver::Wait.new(:timeout => 20)
+      wait.until { @driver.find_element(xpath: @next_xpath).displayed? }
       button.click
     rescue Selenium::WebDriver::Error::StaleElementReferenceError
       click(button)
@@ -79,7 +78,7 @@ class HtmlExtractor
   def wait_page_load
     begin
       wait = Selenium::WebDriver::Wait.new(:timeout => 20)
-      wait.until { @driver.find_element(xpath: @markerFinePagina).displayed? }
+      wait.until { @driver.find_element(xpath: @marker_fine_pagina).displayed? }
     rescue Selenium::WebDriver::Error::StaleElementReferenceError
       wait_page_load
     end

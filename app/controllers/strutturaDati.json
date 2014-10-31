@@ -1,8 +1,10 @@
-["//*[@id=\"pagnNextLink\"]", [
+["//*[@class=\"listing-pag-n listing-pag-succ\"]", "//*[@id='container']/div[4]/div/div/div[4]/div[2]/div[24]", [
     {
-        "//*[@id=\"twotabsearchtextbox\"]": "asus g750jx"
+        "//*[@id=\"input_cosa\"]": "De Amicis",
+        "//*[@id=\"input_dove\"]": "Roma"
     },
     {
-        "//*[@id=\"twotabsearchtextbox\"]": "isaac asimov"
+        "//*[@id=\"input_cosa\"]": "Bonucci",
+        "//*[@id=\"input_dove\"]": "Milano"
     }
 ]]
