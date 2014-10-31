@@ -14,7 +14,7 @@ class DriverGenerator
 # 1) esempio
 
     # @driver.navigate.to 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
-    # @campiDati['searchField'] = 'Verdi'
+    # @campiDati['searchField'] = 'Rossi'
 
 # 2) esempio
 
