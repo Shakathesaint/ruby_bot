@@ -48,7 +48,7 @@ class HtmlExtractor
         y += 1 # incrementa il numero di pagina
         break if @next_page.nil?
 
-        click(@next_page)
+        click(@next_page.last)
 
         wait_page_load
 
@@ -85,7 +85,7 @@ class HtmlExtractor
   end
 
   def set_next_button(next_xpath)
-    displayed?(xpath: next_xpath) ? @driver.find_element(xpath: next_xpath) : nil
+    displayed?(xpath: next_xpath) ? @driver.find_elements(xpath: next_xpath) : nil
   end
 
   def displayed?(locator)
