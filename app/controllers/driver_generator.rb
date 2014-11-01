@@ -13,8 +13,8 @@ class DriverGenerator
 
 # 1) esempio
 
-    # @driver.navigate.to 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
-    # @lista_campi_dati[0] = {'searchField' => 'Rossi'}
+# @driver.navigate.to 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
+# @lista_campi_dati[0] = {'searchField' => 'Rossi'}
 
 # 2) esempio
 
