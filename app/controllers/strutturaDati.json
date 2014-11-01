@@ -1,13 +1,1 @@
-<<<<<<< HEAD
-=======
-["//*[@id=\"container\"]/div[4]/div/div/div[4]/div[2]/div[24]/div/div/ul/li/a", "//*[@id=\"container\"]/div[4]", [
-    {
-        "//*[@id=\"input_cosa\"]": "De Amicis",
-        "//*[@id=\"input_dove\"]": "Roma"
-    },
-    {
-        "//*[@id=\"input_cosa\"]": "Bonucci",
-        "//*[@id=\"input_dove\"]": "Milano"
-    }
-]]
->>>>>>> e90cd9f... Adesso viene correttamente identificata la fine della ricerca: aggiunto un check per verificare che il tasto next cambi da pagina a pagina
+["//*[@class=\"listing-pag-n listing-pag-succ\"]",null,[{"//*[@id=\"input_cosa\"]":"De Amicis","//*[@id=\"input_dove\"]":"Roma"},{"//*[@id=\"input_cosa\"]":"Bonucci","//*[@id=\"input_dove\"]":"Milano"}]]

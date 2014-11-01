@@ -53,7 +53,7 @@ class HtmlExtractor
         break if @next_page.nil? or old_next_page == @next_page
         old_next_page = @next_page
 
-        click(@next_page.last)
+        click(@next_page)
 
         wait_page_load
 
@@ -90,7 +90,7 @@ class HtmlExtractor
   end
 
   def set_next_button(next_xpath)
-    displayed?(xpath: next_xpath) ? @driver.find_elements(xpath: next_xpath) : nil
+    displayed?(xpath: next_xpath) ? @driver.find_element(xpath: next_xpath) : nil
   end
 
   def displayed?(locator)
