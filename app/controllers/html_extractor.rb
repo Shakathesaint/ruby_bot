@@ -11,7 +11,10 @@ class HtmlExtractor
     end
 
     @next_xpath = @struttura_dati[0]
-    @marker_fine_pagina = @struttura_dati[1] # deve essere un elemento che garantisce che la pagina sia stata caricata completamente
+    # @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente
+    # è consigliato di evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
+    # nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
+    @marker_fine_pagina = @struttura_dati[1]
     @lista_campi_dati = @struttura_dati[2]
 
 
@@ -33,6 +36,7 @@ class HtmlExtractor
       wait_page_load
 
       @next_page = set_next_button(@next_xpath)
+      old_next_page = nil
 
       # scansione di tutte le pagine risultato Y della ricerca X
       # ciclo do-while, realizzato con il break come suggerisce il creatore di Ruby
@@ -46,7 +50,8 @@ class HtmlExtractor
         end
 
         y += 1 # incrementa il numero di pagina
-        break if @next_page.nil?
+        break if @next_page.nil? or old_next_page == @next_page
+        old_next_page = @next_page
 
         click(@next_page.last)
 
