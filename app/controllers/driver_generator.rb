@@ -13,10 +13,10 @@ class DriverGenerator
 
 # 1) esempio
 
-    @driver.navigate.to 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
-    @struttura_dati[0] = '//*[@title="Vai alla pagina successiva"]' # xpath del tasto next
-    @struttura_dati[1] = '//*[@id="pager"]' # marker di fine pagina - garantisce che la pagina ha terminato il caricamento
-    @lista_campi_dati[0] = {'//*[@id="searchField"]' => 'Rossi'}
+# @driver.navigate.to 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
+# @struttura_dati[0] = '//*[@title="Vai alla pagina successiva"]' # xpath del tasto next
+# @struttura_dati[1] = '//*[@id="pager"]' # marker di fine pagina - garantisce che la pagina ha terminato il caricamento
+# @lista_campi_dati[0] = {'//*[@id="searchField"]' => 'Rossi'}
 
 # 2) esempio
 
@@ -50,6 +50,30 @@ class DriverGenerator
     end
   end
 
+  ###############
+  # metodi SETTER
+  ###############
+
+  def site=(url)
+    @driver.navigate.to url
+  end
+
+  # @param [String] xpath
+  def next_xpath=(xpath)
+    @struttura_dati[0] = xpath
+  end
+
+  # @param [String] xpath
+  def page_loaded_xpath=(xpath)
+    @struttura_dati[1] = xpath
+  end
+
+  # @param [Hash] hash
+  def add_ricerca(hash)
+    @lista_campi_dati << hash
+  end
+
+
 ###############
 # metodi GETTER
 ###############
@@ -62,9 +86,9 @@ class DriverGenerator
     @driver
   end
 
-  def quit
-    @driver.quit
-  end
+  # def quit
+  #   @driver.quit
+  # end
 
   # def strutturaDati
   #   @strutturaDati

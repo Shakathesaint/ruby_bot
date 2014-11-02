@@ -1,12 +1,12 @@
 class HtmlExtractor
   require 'selenium-webdriver'
 
-  def initialize(driver)
+  def initialize(driver, nomefile_json = 'strutturaDati.json')
     @driver = driver
     @pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
 
     # crea una mappa a partire dal file .json passato
-    File.open('strutturaDati.json', 'r') do |leggi|
+    File.open(nomefile_json, 'r') do |leggi|
       @struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
     end
 

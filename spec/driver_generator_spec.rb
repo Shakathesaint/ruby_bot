@@ -5,7 +5,7 @@ describe DriverGenerator do
 
   describe '#inizialize' do
     after(:each) do
-      @driverGenerator.quit
+      @driverGenerator.driver.quit
     end
 
     context 'given valid data' do
@@ -23,7 +23,7 @@ describe DriverGenerator do
       @driverGenerator = DriverGenerator.new
     end
     after(:all) do
-      @driverGenerator.quit
+      @driverGenerator.driver.quit
     end
 
     context 'given a parameter' do
@@ -43,7 +43,7 @@ describe DriverGenerator do
 
   describe '#driver' do
     after(:each) do
-      @driverGenerator.quit
+      @driverGenerator.driver.quit
     end
 
     context 'given a DriverGenerator object' do
@@ -54,22 +54,6 @@ describe DriverGenerator do
     end
   end
 
-=begin
-  describe '#quit' do
-    before(:all) do
-      @driverGenerator = DriverGenerator.new
-    end
-    # after(:each) do
-    #   @driverGenerator.quit
-    # end
 
-    context 'given a DriverGenerator object' do
-      it 'chiude il broswer aperto in precedenza' do
-        @driverGenerator.quit
-        expect(@driverGenerator.driver.navigate.to('www.google.it')).to receive(include('Errno::ECONNREFUSED: Connection refused'))
-      end
-    end
-  end
-=end
 
 end
