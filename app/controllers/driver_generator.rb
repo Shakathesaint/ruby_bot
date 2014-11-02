@@ -41,11 +41,11 @@ class DriverGenerator
 # @lista_campi_dati[1] = {:'//*[@id="input_cosa"]' => 'Bonucci',
 #                         :'//*[@id="input_dove"]' => 'Roma'}
 
-    to_file_json
+# to_file_json
   end
 
-  def to_file_json
-    File.open('strutturaDati.json', 'w') do |scrivi|
+  def to_file_json (dati = 'strutturaDati.json')
+    File.open(dati, 'w') do |scrivi|
       scrivi << @struttura_dati.to_json
     end
   end
@@ -60,6 +60,10 @@ class DriverGenerator
 
   def driver
     @driver
+  end
+
+  def quit
+    @driver.quit
   end
 
   # def strutturaDati

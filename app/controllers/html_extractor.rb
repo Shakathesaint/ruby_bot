@@ -27,6 +27,7 @@ class HtmlExtractor
         # continua a riempire i campi finché richiesto
         # la variabile element deve essere globale ($) per poter essere vista dall'esterno del blocco precedente
         campo_input = @driver.find_element(xpath: "#{nomeCampo}")
+        campo_input.clear # garantisce che non si scriva sopra ai valori di default del campo
         campo_input.send_keys "#{testoCampo}"
       end
 
@@ -97,10 +98,13 @@ class HtmlExtractor
   end
 
   def set_next_button(next_xpath)
-    puts "Xpath fornito non univoco: corrisponde a #{@driver.find_elements(xpath: next_xpath).length} elementi"
+    elementi_corrispondenti = @driver.find_elements(xpath: next_xpath)
+    if elementi_corrispondenti.size > 1
+      puts "Xpath fornito non univoco: corrisponde a #{@driver.find_elements(xpath: next_xpath).length} elementi"
+    end
     # potrebbe essere che l'xpath passato non sia univoco, in tal caso viene considerato
     # valido l'ultimo elemento corrispondente a tale xpath
-    displayed?(xpath: next_xpath) ? @driver.find_elements(xpath: next_xpath).last : nil
+    displayed?(xpath: next_xpath) ? elementi_corrispondenti.last : nil
   end
 
   def displayed?(locator)
