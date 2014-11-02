@@ -1,10 +1,5 @@
-["//*[@class=\"listing-pag-n listing-pag-succ\"]", "//*[@id=\"container\"]/div[4]", [
+["//*[@title=\"Vai alla pagina successiva\"]", "//*[@id=\"pager\"]", [
     {
-        "//*[@id=\"input_cosa\"]": "De Amicis",
-        "//*[@id=\"input_dove\"]": "Roma"
-    },
-    {
-        "//*[@id=\"input_cosa\"]": "Bonucci",
-        "//*[@id=\"input_dove\"]": "Roma"
+        "//*[@id=\"searchField\"]": "Rossi"
     }
 ]]
