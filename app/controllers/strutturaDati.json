@@ -1,1 +1,10 @@
-["//*[@class=\"listing-pag-n listing-pag-succ\"]",null,[{"//*[@id=\"input_cosa\"]":"De Amicis","//*[@id=\"input_dove\"]":"Roma"},{"//*[@id=\"input_cosa\"]":"Bonucci","//*[@id=\"input_dove\"]":"Milano"}]]
+["//*[@class=\"listing-pag-n listing-pag-succ\"]", "//*[@id=\"container\"]/div[4]", [
+    {
+        "//*[@id=\"input_cosa\"]": "De Amicis",
+        "//*[@id=\"input_dove\"]": "Roma"
+    },
+    {
+        "//*[@id=\"input_cosa\"]": "Bonucci",
+        "//*[@id=\"input_dove\"]": "Roma"
+    }
+]]

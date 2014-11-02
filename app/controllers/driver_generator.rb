@@ -26,15 +26,16 @@ class DriverGenerator
 
 # 3) esempio
 # @strutturaDati[0] = '//*[@id="container"]/div[4]/div/div/div[4]/div[2]/div[24]/div/div/ul/li[3]/a' # xpath del tasto next
-    @struttura_dati[0] = '//*[@id="container"]/div[4]/div/div/div[4]/div[2]/div[24]/div/div/ul/li/a' # xpath del tasto next
-# @struttura_dati[0] = '//a[contains(text(), "Successivo")]' # xpath del tasto next
+#     @struttura_dati[0] = '//*[@id="container"]/div[4]/div/div/div[4]/div[2]/div[24]/div/div/ul/li/a' # xpath del tasto next
+#     @struttura_dati[0] = '//a[contains(text(), "Successivo")]' # xpath del tasto next
     @struttura_dati[0] = '//*[@class="listing-pag-n listing-pag-succ"]' # xpath del tasto next
-#     @struttura_dati[1] = '//*[@id="container"]/div[4]'
+    @struttura_dati[1] = '//*[@id="container"]/div[4]'
+
     @driver.navigate.to 'http://www.paginebianche.it/'
     @lista_campi_dati[0] = {:'//*[@id="input_cosa"]' => 'De Amicis',
                             :'//*[@id="input_dove"]' => 'Roma'}
     @lista_campi_dati[1] = {:'//*[@id="input_cosa"]' => 'Bonucci',
-                            :'//*[@id="input_dove"]' => 'Milano'}
+                            :'//*[@id="input_dove"]' => 'Roma'}
 
     to_file_json
   end

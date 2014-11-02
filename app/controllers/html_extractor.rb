@@ -53,6 +53,7 @@ class HtmlExtractor
         break if @next_page.nil? or old_next_page == @next_page
         old_next_page = @next_page
 
+        puts "x1 #{@next_page.location_once_scrolled_into_view}"
         click(@next_page)
 
         wait_page_load
@@ -72,17 +73,22 @@ class HtmlExtractor
   # rilanciato ricorsivamente finché la pagina non presenta più cambiamenti
   def click(button)
     begin
-      wait = Selenium::WebDriver::Wait.new(:timeout => 20)
-      wait.until { @driver.find_element(xpath: @next_xpath).displayed? }
+      # wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+      # button2 = @driver.find_element(xpath: "//*[@id='container']/div[4]/div/div/div[4]/div[2]/div[24]/div/div")
+      # button2.click
+      # wait.until { @driver.find_element(xpath: @next_xpath).displayed? }
       button.click
     rescue Selenium::WebDriver::Error::StaleElementReferenceError
       click(button)
+    rescue Selenium::WebDriver::Error::ElementNotVisibleError
+      puts "x2 #{button.location_once_scrolled_into_view}"
+      button.click
     end
   end
 
   def wait_page_load
     begin
-      wait = Selenium::WebDriver::Wait.new(:timeout => 20)
+      wait = Selenium::WebDriver::Wait.new(:timeout => 10)
       wait.until { @driver.find_element(xpath: @marker_fine_pagina).displayed? }
     rescue Selenium::WebDriver::Error::StaleElementReferenceError
       wait_page_load
@@ -90,7 +96,8 @@ class HtmlExtractor
   end
 
   def set_next_button(next_xpath)
-    displayed?(xpath: next_xpath) ? @driver.find_element(xpath: next_xpath) : nil
+    puts "elementi trovati: #{@driver.find_elements(xpath: next_xpath).length}"
+    displayed?(xpath: next_xpath) ? @driver.find_elements(xpath: next_xpath).last : nil
   end
 
   def displayed?(locator)
