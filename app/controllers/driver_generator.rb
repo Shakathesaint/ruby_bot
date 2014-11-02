@@ -44,7 +44,7 @@ class DriverGenerator
 # to_file_json
   end
 
-  def to_file_json (dati = 'strutturaDati.json')
+  def to_file_json (dati = './app/controllers/strutturaDati.json')
     File.open(dati, 'w') do |scrivi|
       scrivi << @struttura_dati.to_json
     end
