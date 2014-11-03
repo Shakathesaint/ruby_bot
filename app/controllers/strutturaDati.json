@@ -1,8 +1,0 @@
-["//*[@title=\"Vai alla pagina successiva\"]", "//*[@id=\"pager\"]", [
-    {
-        "//*[@id=\"searchField\"]": "Rossi"
-    },
-    {
-        "//*[@id=\"searchField\"]": "Verdi"
-    }
-]]

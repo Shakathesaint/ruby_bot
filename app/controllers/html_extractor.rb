@@ -1,6 +1,8 @@
 class HtmlExtractor
   require 'selenium-webdriver'
 
+  attr_reader :struttura_dati, :lista_campi_dati
+
   def initialize(driver, nomefile_json = 'strutturaDati.json')
     @driver = driver
     @pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
@@ -16,7 +18,9 @@ class HtmlExtractor
     # nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
     @marker_fine_pagina = @struttura_dati[1]
     @lista_campi_dati = @struttura_dati[2]
+  end
 
+  def avvia_ricerca
 
     # ricerca X, pagina Y
     x = 1

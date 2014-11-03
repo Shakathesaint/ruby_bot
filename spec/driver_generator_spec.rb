@@ -19,6 +19,7 @@ describe DriverGenerator do
 
   describe '#to_file_jason' do
     before(:all) do
+      # cancella tutti i file .json preesistenti
       Dir.glob('./app/controllers/*.json') { |filename| File.delete(filename) }
       @driverGenerator = DriverGenerator.new
     end
