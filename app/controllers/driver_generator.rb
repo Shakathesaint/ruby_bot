@@ -12,7 +12,7 @@ class DriverGenerator
   end
 
   # @param [String] dati - nome del file .json da creare (opzionale)
-  def to_file_json (dati = @dir + 'struttura_dati.json')
+  def to_file_json (dati = "#{@dir}struttura_dati.json")
     File.open(dati, 'w') do |scrivi|
       scrivi << @struttura_dati.to_json
     end

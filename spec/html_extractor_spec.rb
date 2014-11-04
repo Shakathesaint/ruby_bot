@@ -95,7 +95,6 @@ describe HtmlExtractor do
         @stub_dati.goto_site = @site
 
         extr = HtmlExtractor.new @stub_dati.driver
-        extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should be_nil
@@ -108,7 +107,6 @@ describe HtmlExtractor do
         @stub_dati.goto_site = @site
 
         extr = HtmlExtractor.new @stub_dati.driver
-        extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should_not be_nil
@@ -133,7 +131,6 @@ describe HtmlExtractor do
         @stub_dati.goto_site = @site
 
         extr = HtmlExtractor.new @stub_dati.driver
-        extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should be_nil
@@ -146,7 +143,6 @@ describe HtmlExtractor do
         @stub_dati.goto_site = @site
 
         extr = HtmlExtractor.new @stub_dati.driver
-        extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should_not be_nil

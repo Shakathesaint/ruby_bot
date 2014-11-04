@@ -5,7 +5,7 @@ class HtmlExtractor
 
   @dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
-  def initialize(driver, nomefile_json = @dir + 'struttura_dati.json')
+  def initialize(driver, nomefile_json = "#{@dir}struttura_dati.json")
     @driver = driver
     @pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
 
@@ -57,7 +57,7 @@ class HtmlExtractor
         # pagine_risultato[x][y]
         html_source = @driver.page_source
         pagine_risultato[[x-1, y-1]] = html_source
-        File.open(@dir + 'file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
+        File.open(@dir.to_s + 'file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
           scrivi << html_source
         end
 
@@ -94,8 +94,6 @@ class HtmlExtractor
     rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
       errore(e)
       click(button)
-      # rescue Selenium::WebDriver::Error::ElementNotVisibleError
-      #   button.click
     end
   end
 
