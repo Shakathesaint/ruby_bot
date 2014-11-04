@@ -9,12 +9,15 @@ stub_dati.add_ricerca '//*[@id="searchField"]' => 'Verdi'
 stub_dati.site = 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
 stub_dati.to_file_json 'strutturaDati.json'
 
-
-puts 'main: ' + Dir.pwd
+# puts 'main: ' + Dir.pwd
 
 #todo HtmlExtractor potrebbe restituire un array contenente tutte le pagine invece dei file .html; questo consentirebbe di gestire meglio i test avendo valori di ritorno interni al codice
-x = HtmlExtractor.new(stub_dati.driver)
-x.avvia_ricerca
-puts x.struttura_dati
-puts x.lista_campi_dati
+extractor = HtmlExtractor.new(stub_dati.driver)
+risultato = extractor.avvia_ricerca
+
+puts risultato[[0, 0]]
+
+
+# puts extractor.struttura_dati
+# puts extractor.lista_campi_dati
 # stub_dati.driver.quit

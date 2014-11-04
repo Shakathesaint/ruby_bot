@@ -20,9 +20,12 @@ class HtmlExtractor
     @lista_campi_dati = @struttura_dati[2]
   end
 
+  # @return [Array] pagine_risultato
   def avvia_ricerca
-
     # ricerca X, pagina Y
+
+    pagine_risultato = Hash.new # matrice simulata con Hash, viene richiamata con la sintassi pagine_risultato[[x, y]]
+    # dove in realtà ogni '[x, y]' è un hash per un relativo valore
     x = 1
     @lista_campi_dati.each do |ricerca|
       y = 1
@@ -47,9 +50,11 @@ class HtmlExtractor
       # ciclo do-while, realizzato con il break come suggerisce il creatore di Ruby
       loop do
 
-        # salva il codice html della pagina Y della ricerca X nel file:
+        # salva il codice html della pagina Y della ricerca X in:
         # file_rXpY.html
+        # pagine_risultato[x][y]
         html_source = @driver.page_source
+        pagine_risultato[[x-1, y-1]] = html_source
         File.open('file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
           scrivi << html_source
         end
@@ -71,6 +76,7 @@ class HtmlExtractor
         x += 1
       end
     end
+    pagine_risultato
   end
 
   # il metodo click() cattura la seguente eccezione StaleElementReferenceError che si verifica quando qualche elemento

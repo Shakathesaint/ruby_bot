@@ -47,7 +47,7 @@ describe HtmlExtractor do
         next_xpath = '//*[@id="pagnNextLink"]' # xpath del tasto next
         page_loaded_xpath = '//*[@id="pagnNextString"]' # marker di fine pagina - garantisce che la pagina ha terminato il caricamento
         r1 = {'//*[@id="twotabsearchtextbox"]' => 'asus g750jx'}
-        r2 = {'//*[@id="twotabsearchtextbox"]' => 'isaac asimov'}
+        r2 = {'//*[@id="twotabsearchtextbox"]' => 'asus g750jz'}
         site = 'http://www.amazon.it/'
 
         @stub_dati.next_xpath = next_xpath
@@ -63,7 +63,7 @@ describe HtmlExtractor do
 
     end
 
-    context 'given an Fnovi search request' do
+    context 'given a Fnovi search request' do
 
       it 'esegue una ricerca multipla su Fnovi' do
         next_xpath = '//*[@title="Vai alla pagina successiva"]' # xpath del tasto next
@@ -85,7 +85,7 @@ describe HtmlExtractor do
 
     end
 
-    context 'given an PagineBianche search request' do
+    context 'given a PagineBianche search request' do
 
       it 'esegue una ricerca multipla su PagineBianche' do
         next_xpath = '//*[@class="listing-pag-n listing-pag-succ"]' # xpath del tasto next
