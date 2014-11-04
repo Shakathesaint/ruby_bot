@@ -3,7 +3,9 @@ class HtmlExtractor
 
   attr_reader :struttura_dati, :lista_campi_dati
 
-  def initialize(driver, nomefile_json = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/struttura_dati.json')
+  @dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
+
+  def initialize(driver, nomefile_json = @dir + 'struttura_dati.json')
     @driver = driver
     @pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
 
@@ -55,8 +57,7 @@ class HtmlExtractor
         # pagine_risultato[x][y]
         html_source = @driver.page_source
         pagine_risultato[[x-1, y-1]] = html_source
-        dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
-        File.open(dir + 'file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
+        File.open(@dir + 'file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
           scrivi << html_source
         end
 

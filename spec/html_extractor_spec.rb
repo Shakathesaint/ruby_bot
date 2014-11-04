@@ -25,9 +25,9 @@ describe HtmlExtractor do
         @stub_dati.page_loaded_xpath = page_loaded_xpath
         @stub_dati.add_ricerca r1
         @stub_dati.add_ricerca r2
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         #############################################
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
 
         extr.struttura_dati[0].should be == next_xpath
         extr.struttura_dati[1].should be == page_loaded_xpath
@@ -54,10 +54,10 @@ describe HtmlExtractor do
       end
 
       it 'esegue una ricerca singola su Amazon' do
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should be_nil
@@ -67,10 +67,10 @@ describe HtmlExtractor do
         r2 = {'//*[@id="twotabsearchtextbox"]' => 'asus g750jz'}
         @stub_dati.add_ricerca r2
 
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should_not be_nil
@@ -91,10 +91,10 @@ describe HtmlExtractor do
       end
 
       it 'esegue una ricerca singola su Fnovi' do
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
         extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
@@ -104,10 +104,10 @@ describe HtmlExtractor do
       it 'esegue una ricerca multipla su Fnovi' do
         r2 = {'//*[@id="searchField"]' => 'Verdi'}
         @stub_dati.add_ricerca r2
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
         extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
@@ -129,10 +129,10 @@ describe HtmlExtractor do
       end
 
       it 'esegue una ricerca singola su PagineBianche' do
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
         extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
@@ -142,10 +142,10 @@ describe HtmlExtractor do
       it 'esegue una ricerca multipla su PagineBianche' do
         r2 = {:'//*[@id="input_cosa"]' => 'Bonucci', :'//*[@id="input_dove"]' => 'Roma'}
         @stub_dati.add_ricerca r2
-        @stub_dati.to_file_json test1 = 'test1.json'
+        @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new(@stub_dati.driver, test1)
+        extr = HtmlExtractor.new @stub_dati.driver
         extr.avvia_ricerca
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
