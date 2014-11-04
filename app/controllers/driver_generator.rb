@@ -21,7 +21,7 @@ class DriverGenerator
   ###############
 
   # @param [String] url
-  def site=(url)
+  def goto_site=(url)
     @driver.navigate.to url
   end
 
