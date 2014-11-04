@@ -9,8 +9,21 @@ class DriverGenerator
     @struttura_dati[2] = @lista_campi_dati
   end
 
-  def to_file_json (dati = './app/controllers/strutturaDati.json')
-    File.open(dati, 'w') do |scrivi|
+  # @param [String] dati - nome del file .json da creare (opzionale)
+  def to_file_json (*dati)
+    # se non viene passato un nome del file
+    if dati.length == 0
+      # setta la directory a quella di default (bot_testing)
+      Dir.chdir
+      Dir.chdir('./RubymineProjects/ruby_bot/bot_testing')
+      curr_dir = Dir.pwd
+      # e crea il file con il nome di default
+      nome_file = curr_dir + '/struttura_dati.json'
+    else
+      # prende il nome (e percorso) fornito come parametro
+      nome_file = dati[0]
+    end
+    File.open(nome_file, 'w') do |scrivi|
       scrivi << @struttura_dati.to_json
     end
     puts Dir.pwd

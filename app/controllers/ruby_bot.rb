@@ -7,7 +7,7 @@ stub_dati.page_loaded_xpath = '//*[@id="pager"]'
 stub_dati.add_ricerca '//*[@id="searchField"]' => 'Bianchi'
 stub_dati.add_ricerca '//*[@id="searchField"]' => 'Verdi'
 stub_dati.goto_site = 'http:/www.fnovi.it/index.php?pagina=ricerca-iscritti'
-stub_dati.to_file_json 'strutturaDati.json'
+stub_dati.to_file_json
 
 # puts 'main: ' + Dir.pwd
 
