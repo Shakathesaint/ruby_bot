@@ -84,16 +84,16 @@ class HtmlExtractor
   def click(button)
     begin
       # viene preso il primo elemento appartenente all'array dell'xpath fornito in input
-      first_element = button.shift.click
+      button.first.click
     rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
       # cattura l'eccezione StaleElementReferenceError che si verifica quando qualche elemento
       # viene cambiato nella pagina prima ancora che possa essere clickato il pulsante. Successivamente il metodo
       # viene rilanciato ricorsivamente finché la pagina non presenta più cambiamenti
       errore(e)
-      button.unshift(first_element)
       click(button)
     rescue Selenium::WebDriver::Error::ElementNotVisibleError => e
       errore(e)
+      button.shift
       click(button)
     end
   end
