@@ -92,6 +92,7 @@ class HtmlExtractor
       errore(e)
       click(button)
     rescue Selenium::WebDriver::Error::ElementNotVisibleError => e
+      # se il primo elemento è hidden lancia ricorsivamente il metodo sul vettore risultante eliminando il primo elemento
       errore(e)
       button.shift
       click(button)
