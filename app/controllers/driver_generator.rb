@@ -2,8 +2,6 @@ class DriverGenerator
   require 'selenium-webdriver'
   require 'json'
 
-  @dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
-
   def initialize
     @driver = Selenium::WebDriver.for :firefox
     @lista_campi_dati = []
@@ -12,7 +10,7 @@ class DriverGenerator
   end
 
   # @param [String] dati - nome del file .json da creare (opzionale)
-  def to_file_json (dati = "#{@dir}struttura_dati.json")
+  def to_file_json (dati = "#{$dir}struttura_dati.json")
     File.open(dati, 'w') do |scrivi|
       scrivi << @struttura_dati.to_json
     end
