@@ -62,10 +62,10 @@ class HtmlExtractor
         end
 
         y += 1 # incrementa il numero di pagina
-        break if @next_page.nil? or old_next_page == @next_page
+        break if @next_page.nil? or old_next_page == @next_page # esce se non c'è più il tasto next oppure
+        # c'è ma la pagina non è cambiata
         old_next_page = @next_page
 
-        # puts "x1 #{@next_page.location_once_scrolled_into_view}"
         click(@next_page)
 
         wait_page_load
@@ -81,17 +81,18 @@ class HtmlExtractor
     pagine_risultato
   end
 
-  # il metodo click() cattura la seguente eccezione StaleElementReferenceError che si verifica quando qualche elemento
-  # viene cambiato nella pagina prima ancora che possa essere clickato il pulsante. L'eccezione viene catturata e il metodo
-  # rilanciato ricorsivamente finché la pagina non presenta più cambiamenti
   def click(button)
     begin
-      ### potrebbe essere che displayed? implichi che l'elemento sia visualizzato A SCHERMO??
-      ### in questo caso si spiegherebbe perché non trova il campo next in determinati casi
-      # wait = Selenium::WebDriver::Wait.new(:timeout => 10)
-      # wait.until { @driver.find_element(xpath: @next_xpath).displayed? }
-      button.click
+      # viene preso il primo elemento appartenente all'array dell'xpath fornito in input
+      first_element = button.shift.click
     rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
+      # cattura l'eccezione StaleElementReferenceError che si verifica quando qualche elemento
+      # viene cambiato nella pagina prima ancora che possa essere clickato il pulsante. Successivamente il metodo
+      # viene rilanciato ricorsivamente finché la pagina non presenta più cambiamenti
+      errore(e)
+      button.unshift(first_element)
+      click(button)
+    rescue Selenium::WebDriver::Error::ElementNotVisibleError => e
       errore(e)
       click(button)
     end
@@ -114,7 +115,13 @@ class HtmlExtractor
     end
     # potrebbe essere che l'xpath passato non sia univoco, in tal caso viene considerato
     # valido l'ultimo elemento corrispondente a tale xpath
-    displayed?(xpath: next_xpath) ? elementi_corrispondenti.last : nil
+    if displayed?(xpath: next_xpath) then
+      elementi_corrispondenti
+      # restituisco l'intero array di elementi corrispondenti all'xpath fornito
+      # il metodo click si occuperà di scartare quelli eventualmente non validi perché non clickabili
+    else
+      nil
+    end
   end
 
   def displayed?(locator)
