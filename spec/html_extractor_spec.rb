@@ -1,13 +1,18 @@
 require 'rspec'
+require 'headless'
+
 require_relative '../app/controllers/driver_generator'
 require_relative '../app/controllers/html_extractor'
 
 describe HtmlExtractor do
   before(:each) do
+    @headless = Headless.new
+    @headless.start
     @stub_dati = DriverGenerator.new
   end
   after(:each) do
     @stub_dati.driver.quit
+    @headless.destroy
   end
 
   describe '#inizialize' do

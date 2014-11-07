@@ -11,7 +11,6 @@ stub_dati.to_file_json
 
 # puts 'main: ' + Dir.pwd
 
-#todo HtmlExtractor potrebbe restituire un array contenente tutte le pagine invece dei file .html; questo consentirebbe di gestire meglio i test avendo valori di ritorno interni al codice
 extractor = HtmlExtractor.new(stub_dati.driver)
 risultato = extractor.avvia_ricerca
 
