@@ -15,7 +15,8 @@ class HtmlExtractor
     end
 
     @next_xpath = @struttura_dati[0]
-    # @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente
+    # @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente.
+    # Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento
     # è consigliato di evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
     # nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
     @marker_fine_pagina = @struttura_dati[1]
