@@ -2,37 +2,43 @@ require 'httparty'
 require 'nokogiri'
 require 'open-uri'
 
-class StaticExtractor
+class StaticFinder
   $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
   def initialize (url)
-    #todo: cancellare @form_xpath e prendere il valore da get_form
-    @form_xpath = './/form'
-    @doc = Nokogiri::HTML(open(url))
+    @doc = Nokogiri::XML(open(url))
   end
 
+
   #
-  # prende l'xpath del primo campo dati e risale al form che lo contiene
+  # prende l'xpath di un elemento e risale al form che lo contiene
   #
-  # @param [String] campo_dati
-  def get_form (campo_dati_xpath)
-    # risalgo al form di appartenenza
-    blocco = @doc.xpath(campo_dati_xpath)
+  # @param [String] xpath
+  # @return [Nokogiri::XML::NodeSet] blocco è l'oggetto che racchiude la form
+  def get_form (xpath)
+    # risalgo al form di appartenenza - nota: a priori un xpath non è univoco, per questo
+    # in realtà blocco[] è un array di risultati
+    blocco = @doc.xpath(xpath)
     #chiamata ricorsiva
-    if blocco[0].name == 'form'
-      blocco[0]
+    if blocco[0].name == 'form' # blocco[0].class = Nokogiri::XML::Element
+      blocco # blocco.class = Nokogiri::XML::NodeSet
     else
-      get_form ("#{campo_dati_xpath}/..")
+      get_form ("#{xpath}/..")
     end
   end
 
 
-  def is_static?
-    form = @doc.xpath(@form_xpath)
+  def is_static?(campo_dati_xpath)
+    form = get_form(campo_dati_xpath)
+    puts form_xpath = form[0].path
+
     method = form[0]['method']
     on_submit = form[0]['onsubmit']
-    input = @doc.xpath("#{@form_xpath}/input")
-    @static = -1
+    # input = @doc.xpath("#{form_xpath}/input")
+    input = @doc.xpath("#{form_xpath}//*[name() = 'input']") # equivale alla riga precendente ma così scritto
+    # funziona anche con documenti xhtml
+    puts "Numero di elementi <input> trovati: #{input.length}"
+    # @static = -1
 
     # ATTENZIONE: il submit potrebbe non essere sul primo sottolivello del form, ma anche in livelli successivi
     # inoltre posso avere anche più elementi input per cui devo controllare in tutti gli input[i]
