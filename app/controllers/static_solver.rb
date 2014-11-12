@@ -2,8 +2,8 @@ require 'httparty'
 require 'nokogiri'
 require 'open-uri'
 
-class StaticFinder
-  $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
+class StaticSolver
+$dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
   def initialize (url)
     @doc = Nokogiri::XML(open(url))
