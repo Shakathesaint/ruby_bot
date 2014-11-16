@@ -84,27 +84,6 @@ end
     return @static
   end
 
-# @return [Array] pagine_risultato
-  def avvia_ricerca
-
-  end
-
-  def click(button)
-
-  end
-
-  def wait_page_load
-
-  end
-
-  def set_next_button(next_xpath)
-
-  end
-
-  def displayed?(locator)
-
-  end
-
   def errore(e)
     puts "catturata eccezione: #{e} : #{e.backtrace.inspect}"
   end
