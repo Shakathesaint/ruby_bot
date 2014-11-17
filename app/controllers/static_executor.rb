@@ -1,7 +1,8 @@
 require '../../app/controllers/static_solver'
 require '../../app/controllers/static_extractor'
 
-page = StaticSolver.new('http://www.fnovi.it/index.php?pagina=ricerca-iscritti', './/*[@id="searchField"]')
+url = 'http://www.fnovi.it/index.php?pagina=ricerca-iscritti'
+page = StaticSolver.new(url, './/*[@id="searchField"]')
 # static = page.is_static?
 
 # site = StaticSolver.new 'http://www.amazon.it'
@@ -22,9 +23,9 @@ page = StaticSolver.new('http://www.fnovi.it/index.php?pagina=ricerca-iscritti',
 # puts page.get_element_by_xpath './/*[@id="searchField"]'
 
 
-lista_campi_dati = {'//*[@id="searchField"]' => 'Bianchi'}
+lista_campi_dati = {'//*[@id="searchField"]' => 'Verdi'}
 
-static_search = StaticExtractor.new(page, 'http://www.fnovi.it/index.php?pagina=ricerca-iscritti', lista_campi_dati)
+static_search = StaticExtractor.new(page, lista_campi_dati)
 
 
 # puts '*** static? ' + static.to_s + ' ***'
