@@ -1,8 +1,21 @@
 require '../../app/controllers/static_solver'
 require '../../app/controllers/static_extractor'
 
-url = 'http://www.fnovi.it/index.php?pagina=ricerca-iscritti'
-page = StaticSolver.new(url, './/*[@id="searchField"]')
+##############################################################################
+###########       SITI DI TEST       #########################################
+
+# url = 'http://www.fnovi.it/index.php?pagina=ricerca-iscritti'
+# page = StaticSolver.new(url, './/*[@id="searchField"]')
+
+url = 'http://www.vanbasco.com/it'
+page = StaticSolver.new(url, './/input[@name="q"]')
+
+# url = 'http://torrentz.eu'
+# page = StaticSolver.new(url, './/input[@name="q"]')
+
+##############################################################################
+##############################################################################
+
 # static = page.is_static?
 
 # site = StaticSolver.new 'http://www.amazon.it'
@@ -23,9 +36,15 @@ page = StaticSolver.new(url, './/*[@id="searchField"]')
 # puts page.get_element_by_xpath './/*[@id="searchField"]'
 
 
-lista_campi_dati = {'//*[@id="searchField"]' => 'Verdi'}
+lista_campi_dati = {'.//input[@name="q"]' => 'Vasco Rossi'}
+# lista_campi_dati = {'//*[@id="searchField"]' => 'Verdi'}
 
 static_search = StaticExtractor.new(page, lista_campi_dati)
+puts p = static_search.pagina_risultato
+
+File.open('prova.html', 'w') do |scrivi|
+  scrivi << p
+end
 
 
 # puts '*** static? ' + static.to_s + ' ***'

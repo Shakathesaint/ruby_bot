@@ -1,17 +1,30 @@
 require 'httparty'
 
 class StaticExtractor
+  attr_reader :pagina_risultato
   include HTTParty
 
   #todo: per il momento passiamo direttamente questi valori, successivamente verranno estratti e passati dalla superclasse che gestisce statico/dinamico
   def initialize (static_solver, lista_campi_dati)
     @page = static_solver
     @action_url = static_solver.action # attributo 'action' dell'elemento <input>: contiene l'url della pagina cui inviare la GET/POST
+    # alcune pagine hanno una 'action' con un url parziale, in quel caso richiamiamo il metodo base_uri di HTTParty
+    # che setta un url di base cui viene 'appesa' la stringa contenuta nell'action
+    unless @action_url.include? 'http://' # unless è un if negato
+      #alcuni 'action' non cominciano per '/', in quel caso lo aggiungiamo
+      unless @action_url[0] == '/'
+        @action_url = '/' + @action_url
+      end
+      search_homepage_url = @page.url
+      self.class.base_uri search_homepage_url
+    end
+
     @options = compila_parametri lista_campi_dati
 
     # @campi_dati_html = xpath_to_html lista_campi_dati
 
-    avvia_ricerca
+    risultato = avvia_ricerca
+    @pagina_risultato = risultato.to_s
   end
 
   # devo ricavarmi i campi dati (xpath e testo) da inserire nella richiesta e dividere get e post
@@ -44,10 +57,10 @@ class StaticExtractor
   def avvia_ricerca
 
     if is_get_method?
-      puts self.class.get(@action_url, @options)
+      return self.class.get(@action_url, @options)
     end
     if is_post_method?
-      puts self.class.post(@action_url, @options)
+      return self.class.post(@action_url, @options)
     end
   end
 

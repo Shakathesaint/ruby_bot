@@ -6,15 +6,6 @@ require 'httparty'
 # puts response.body, response.code, response.message, response.headers.inspect
 
 
-#
-#
-# response = HTTParty.post("http://www.fnovi.it/index.php?pagina=ricerca-iscritti&ricerca=true",
-#                          :query => {'searchField' => "Rossi", 'ordine' => ""},
-#                          :headers => {"Content-Type" => "text/html"})
-#
-# puts response.body, response.code, response.message, response.headers.inspect
-
-
 class HttpTemp
   include HTTParty
   # base_uri 'http://www.vanbasco.com/it'

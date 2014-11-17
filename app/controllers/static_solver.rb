@@ -4,11 +4,12 @@ require 'open-uri'
 class StaticSolver
 $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
-attr_reader :form, :method, :input, :on_submit, :action
+attr_reader :form, :method, :input, :on_submit, :action, :url
 
 
 def initialize (url, campo_dati_xpath)
-    @doc = Nokogiri::XML(open(url))
+  @url = url
+  @doc = Nokogiri::HTML(open(url))
 
     @form = get_form(campo_dati_xpath)
     puts form_xpath = form[0].path
@@ -17,10 +18,18 @@ def initialize (url, campo_dati_xpath)
     @action = @form[0]['action']
     @on_submit = @form[0]['onsubmit']
 
+  # ATTENZIONE: in generale avrò più elementi <input...> nella form e devo analizzarli tutti per trovare il submit
+  # il metodo usato qui sotto consiste nell'aggiungere '/input' all'xpath del form e funziona correttamente;
+  # se usassi invece:
+  # - get_element_by_xpath(campo_dati_xpath)
+  # mi restituirebbe un solo <input...> corrispondente all'xpath del campo dati passato
+
+  @input = @doc.xpath("#{form_xpath}//*[name() = 'input']")
+  # equivale a:
     # input = @doc.xpath("#{form_xpath}/input")
-    @input = @doc.xpath("#{form_xpath}//*[name() = 'input']") # equivale alla riga precendente ma così scritto
-    # funziona anche con documenti xhtml
-    puts "Numero di elementi <input> trovati: #{input.length}"
+    # ma così scritto funziona anche con documenti xhtml
+
+  puts "Numero di elementi <input> trovati: #{@input.length}"
 end
 
 
@@ -34,6 +43,7 @@ end
     # in realtà blocco[] è un array di risultati
     blocco = @doc.xpath(xpath)
     #chiamata ricorsiva
+    pippo = blocco[0]
     if blocco[0].name == 'form' # blocco[0].class = Nokogiri::XML::Element
       blocco # blocco.class = Nokogiri::XML::NodeSet
     else
