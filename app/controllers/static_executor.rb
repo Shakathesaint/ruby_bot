@@ -4,14 +4,16 @@ require '../../app/controllers/static_extractor'
 ##############################################################################
 ###########       SITI DI TEST       #########################################
 
+# attenzione: l'xpath deve sempre iniziare con './/'
+
 # url = 'http://www.fnovi.it/index.php?pagina=ricerca-iscritti'
 # page = StaticSolver.new(url, './/*[@id="searchField"]')
 
-url = 'http://www.vanbasco.com/it'
-page = StaticSolver.new(url, './/input[@name="q"]')
-
-# url = 'http://torrentz.eu'
+# url = 'http://www.vanbasco.com/it'
 # page = StaticSolver.new(url, './/input[@name="q"]')
+
+url = 'http://torrentz.eu'
+page = StaticSolver.new(url, './/input[@name="q"]')
 
 ##############################################################################
 ##############################################################################

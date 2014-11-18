@@ -12,11 +12,13 @@ def initialize (url, campo_dati_xpath)
   @doc = Nokogiri::HTML(open(url))
 
     @form = get_form(campo_dati_xpath)
-    puts form_xpath = form[0].path
+  form_xpath = form[0].path
 
     @method = @form[0]['method']
     @action = @form[0]['action']
     @on_submit = @form[0]['onsubmit']
+
+  #todo: aggiungere onclick
 
   # ATTENZIONE: in generale avrò più elementi <input...> nella form e devo analizzarli tutti per trovare il submit
   # il metodo usato qui sotto consiste nell'aggiungere '/input' all'xpath del form e funziona correttamente;
@@ -43,7 +45,6 @@ end
     # in realtà blocco[] è un array di risultati
     blocco = @doc.xpath(xpath)
     #chiamata ricorsiva
-    pippo = blocco[0]
     if blocco[0].name == 'form' # blocco[0].class = Nokogiri::XML::Element
       blocco # blocco.class = Nokogiri::XML::NodeSet
     else
@@ -56,7 +57,7 @@ end
   # prende l'xpath di un elemento e risale all'elemento corrispondente
   #
   # @param [String] xpath
-  # @return [Nokogiri::XML::NodeSet] blocco è l'oggetto corrispondente all'xpath
+  # @return [Nokogiri::XML::NodeSet] l'oggetto corrispondente all'xpath
   def get_element_by_xpath(xpath)
     # restituisco l'elemento corrispondente - nota: a priori un xpath non è univoco, per questo
     # in realtà blocco[] è un array di risultati

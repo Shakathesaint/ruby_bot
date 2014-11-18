@@ -39,9 +39,8 @@ class StaticExtractor
       nome_input = html_input[0]['name']
       parametri[nome_input] = testo_input
     end
-    options = {query: parametri} if is_get_method?
-    options = {body: parametri} if is_post_method?
-    return options
+    return {body: parametri} if is_post_method?
+    return {query: parametri} # if is_get_method? ## se non c'è attributo 'method' lo consideriamo implicitamente una get
   end
 
 
@@ -58,10 +57,14 @@ class StaticExtractor
 
     if is_get_method?
       return self.class.get(@action_url, @options)
-    end
-    if is_post_method?
+    elsif is_post_method?
       return self.class.post(@action_url, @options)
+    elsif
+      # se non è presente l'attributo 'method' solitamente è implicitamente una get
+    puts 'attributo method non presente - tentativo di lanciare una get'
+      return self.class.get(@action_url, @options)
     end
+
   end
 
 
