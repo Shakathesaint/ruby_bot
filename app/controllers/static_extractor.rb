@@ -31,7 +31,7 @@ class StaticExtractor
   # tramite get_element_by_xpath() prendo ad uno ad uno le key di campi_dati e analizzo gli input in html
 
 
-  def compila_parametri(lista_campi_visibili, lista_campi_hidden = nil)
+  def compila_parametri(lista_campi_visibili, lista_campi_hidden)
     #todo: una volta inseriti i parametri passati da lista_campi dovremmo effettuare una ricerca per i parametri 'hidden' e aggiungerli
     parametri = Hash.new
     lista_campi_visibili.each do |xpath_input, testo_input|
@@ -39,7 +39,7 @@ class StaticExtractor
       nome_input = html_input[0]['name'] # mi ricavo il nome dell'input da inserire nella GET/POST
       parametri[nome_input] = testo_input
     end
-    unless lista_campi_hidden.nil?
+    if lista_campi_hidden.size >= 1
       # lista_campi_hidden viene passata direttamente con coppie {nome => valore} perciò non va convertita da xpath
       # come per lista_campi_visibili
       parametri.merge!(lista_campi_hidden)
