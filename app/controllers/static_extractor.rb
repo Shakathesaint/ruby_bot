@@ -15,8 +15,8 @@ class StaticExtractor
       unless @action_url[0] == '/'
         @action_url = '/' + @action_url
       end
-      search_homepage_url = @page.url
-      self.class.base_uri search_homepage_url
+      homepage_url = @page.url
+      self.class.base_uri homepage_url
     end
 
     @options = compila_parametri lista_campi_dati
@@ -35,8 +35,8 @@ class StaticExtractor
     #todo: una volta inseriti i parametri passati da lista_campi dovremmo effettuare una ricerca per i parametri 'hidden' e aggiungerli
     parametri = Hash.new
     lista_campi.each do |xpath_input, testo_input|
-      html_input = @page.get_element_by_xpath xpath_input
-      nome_input = html_input[0]['name']
+      html_input = @page.get_element_by_xpath xpath_input # prendo l'<input ...> html relativo all'xpath fornito in ingresso
+      nome_input = html_input[0]['name'] # mi ricavo il nome dell'input da inserire nella GET/POST
       parametri[nome_input] = testo_input
     end
     return {body: parametri} if is_post_method?

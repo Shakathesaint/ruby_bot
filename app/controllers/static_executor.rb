@@ -15,8 +15,12 @@ require '../../app/controllers/static_extractor'
 # url = 'http://torrentz.eu'
 # xpath = './/input[@name="q"]'
 
-url = 'http://www.protezionecivile.gov.it/jcms/it/elenco_centrale_delle_org.wp'
-xpath = './/*[@id="search"]'
+# url = 'http://www.protezionecivile.gov.it/jcms/it/elenco_centrale_delle_org.wp'
+# xpath = './/*[@id="search"]'
+
+
+url              = 'http://www.amazon.it'
+xpath            = './/*[@id="twotabsearchtextbox"]'
 
 
 page = StaticSolver.new(url, xpath)
@@ -43,7 +47,7 @@ page = StaticSolver.new(url, xpath)
 # puts page.get_element_by_xpath './/*[@id="searchField"]'
 
 
-lista_campi_dati = {xpath => 'Roma'}
+lista_campi_dati = { xpath => 'ati radeon' }
 # lista_campi_dati = {'//*[@id="searchField"]' => 'Verdi'}
 
 static_search = StaticExtractor.new(page, lista_campi_dati)
