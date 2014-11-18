@@ -27,12 +27,10 @@ class StaticExtractor
     @pagina_risultato = risultato.to_s
   end
 
-  # devo ricavarmi i campi dati (xpath e testo) da inserire nella richiesta e dividere get e post
-  # tramite get_element_by_xpath() prendo ad uno ad uno le key di campi_dati e analizzo gli input in html
-
 
   def compila_parametri(lista_campi_visibili, lista_campi_hidden)
-    #todo: una volta inseriti i parametri passati da lista_campi dovremmo effettuare una ricerca per i parametri 'hidden' e aggiungerli
+    # devo ricavarmi i campi dati (xpath e testo) da inserire nella richiesta e dividere get e post
+    # tramite get_element_by_xpath() prendo ad uno ad uno le key di campi_dati e analizzo gli input in html
     parametri = Hash.new
     lista_campi_visibili.each do |xpath_input, testo_input|
       html_input = @page.get_element_by_xpath xpath_input # prendo l'<input ...> html relativo all'xpath fornito in ingresso
