@@ -67,6 +67,7 @@ class StaticSolver
 
 #
 # restituisce un hash contenente nome e valore di tutti gli input con type='hidden' del form
+#	le coppie sono STRINGHE di tipo {nome => valore}
 #
 # @return [Hash] hidden_inputs
 	def get_hidden_inputs
