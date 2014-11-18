@@ -19,11 +19,11 @@ require '../../app/controllers/static_extractor'
 # xpath = './/*[@id="search"]'
 
 
-url              = 'http://www.amazon.it'
-xpath            = './/*[@id="twotabsearchtextbox"]'
+url   = 'http://www.amazon.it'
+xpath = './/*[@id="twotabsearchtextbox"]'
 
 
-page = StaticSolver.new(url, xpath)
+page          = StaticSolver.new(url, xpath)
 
 
 ##############################################################################
@@ -34,7 +34,6 @@ page = StaticSolver.new(url, xpath)
 
 # site = StaticSolver.new 'http://www.amazon.it'
 # static = site.is_static? './/*[@id="twotabsearchtextbox"]'
-
 
 
 # puts page.form, page.input, page.method, page.on_submit
@@ -54,7 +53,7 @@ static_search = StaticExtractor.new(page, lista_campi_dati)
 puts p = static_search.pagina_risultato
 
 File.open('prova.html', 'w') do |scrivi|
-  scrivi << p
+	scrivi << p
 end
 
 

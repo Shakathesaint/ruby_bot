@@ -27,7 +27,7 @@ class StaticExtractor
     @pagina_risultato = risultato.to_s
   end
 
-
+  #todo: aggiungere la gestione dei parametri per i menu a tendina
   def compila_parametri(lista_campi_visibili, lista_campi_hidden)
     # devo ricavarmi i campi dati (xpath e testo) da inserire nella richiesta e dividere get e post
     # tramite get_element_by_xpath() prendo ad uno ad uno le key di campi_dati e analizzo gli input in html

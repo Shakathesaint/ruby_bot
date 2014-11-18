@@ -16,7 +16,9 @@ class StaticSolver
 
 		@method    = @form[0]['method']
 
-		#todo: se l'attributo action è una stringa vuota può essere un form statico?
+		#todo: creare un test per verificare il caso di un attributo action nullo o stringa vuota
+		# l'action vuoto semplicemente invia la GET/POST all'indirizzo della pagina attuale, quindi teoricamente
+		# dovrebbe poter essere anche statico
 		@action    = @form[0]['action']
 		@on_submit = @form[0]['onsubmit']
 		@on_click  = @form[0]['onclick']
