@@ -47,9 +47,11 @@ page          = StaticSolver.new(url, xpath)
 
 
 lista_campi_dati = { xpath => 'ati radeon' }
+lista_dropdown = { './/*[@id="searchDropdownBox"]' => '' }
+
 # lista_campi_dati = {'//*[@id="searchField"]' => 'Verdi'}
 
-static_search = StaticExtractor.new(page, lista_campi_dati)
+static_search  = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
 puts p = static_search.pagina_risultato
 
 File.open('prova.html', 'w') do |scrivi|
