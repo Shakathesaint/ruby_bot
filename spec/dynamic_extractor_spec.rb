@@ -2,9 +2,9 @@ require 'rspec'
 require 'headless'
 
 require_relative '../app/controllers/driver_generator'
-require_relative '../app/controllers/html_extractor'
+require_relative '../app/controllers/dynamic_extractor'
 
-describe HtmlExtractor do
+describe DynamicExtractor do
   before(:each) do
     # @headless = Headless.new
     # @headless.start
@@ -32,7 +32,7 @@ describe HtmlExtractor do
         @stub_dati.add_ricerca r2
         @stub_dati.to_file_json
         #############################################
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
 
         extr.struttura_dati[0].should be == next_xpath
         extr.struttura_dati[1].should be == page_loaded_xpath
@@ -62,7 +62,7 @@ describe HtmlExtractor do
         @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should be_nil
@@ -75,7 +75,7 @@ describe HtmlExtractor do
         @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should_not be_nil
@@ -99,7 +99,7 @@ describe HtmlExtractor do
         @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should be_nil
@@ -111,7 +111,7 @@ describe HtmlExtractor do
         @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should_not be_nil
@@ -135,7 +135,7 @@ describe HtmlExtractor do
         @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should be_nil
@@ -147,7 +147,7 @@ describe HtmlExtractor do
         @stub_dati.to_file_json
         @stub_dati.goto_site = @site
 
-        extr = HtmlExtractor.new @stub_dati.driver
+        extr = DynamicExtractor.new @stub_dati.driver
         risultato = extr.avvia_ricerca
         risultato[[0, 0]].should_not be_nil
         risultato[[1, 0]].should_not be_nil

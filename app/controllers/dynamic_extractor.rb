@@ -1,6 +1,6 @@
 $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
-class HtmlExtractor
+class DynamicExtractor
   require 'selenium-webdriver'
 
   attr_reader :struttura_dati, :lista_campi_dati

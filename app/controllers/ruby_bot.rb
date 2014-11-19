@@ -1,5 +1,5 @@
 require '../../app/controllers/driver_generator'
-require '../../app/controllers/html_extractor'
+require '../../app/controllers/dynamic_extractor'
 
 stub_dati = DriverGenerator.new
 stub_dati.next_xpath = '//*[@title="Vai alla pagina successiva"]'
@@ -11,7 +11,7 @@ stub_dati.to_file_json
 
 # puts 'main: ' + Dir.pwd
 
-extractor = HtmlExtractor.new(stub_dati.driver)
+extractor = DynamicExtractor.new(stub_dati.driver)
 risultato = extractor.avvia_ricerca
 
 puts risultato[[0, 0]]
