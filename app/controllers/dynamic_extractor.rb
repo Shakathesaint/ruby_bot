@@ -5,10 +5,16 @@ class DynamicExtractor
 
   attr_reader :struttura_dati, :lista_campi_dati
 
-  def initialize(driver, nomefile_json = "#{$dir}struttura_dati.json")
+  # def initialize(driver, nomefile_json = "#{$dir}struttura_dati.json")
+  def initialize(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
     @driver = driver
     @pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
 
+    @next_xpath         = next_xpath
+    @marker_fine_pagina = marker_fine_pagina
+    @lista_campi_dati   = lista_campi_dati
+
+=begin
     # crea una mappa a partire dal file .json passato
     File.open(nomefile_json, 'r') do |leggi|
       @struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
@@ -21,14 +27,14 @@ class DynamicExtractor
     # nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
     @marker_fine_pagina = @struttura_dati[1]
     @lista_campi_dati = @struttura_dati[2]
+=end
   end
 
-  # @return [Array] pagine_risultato
+  # @return [Hash] pagine_risultato: matrice simulata con Hash, viene richiamata con la sintassi pagine_risultato[[x, y]] dove in realtà ogni '[x, y]' è un hash per un relativo valore
   def avvia_ricerca
     # ricerca X, pagina Y
 
-    pagine_risultato = Hash.new # matrice simulata con Hash, viene richiamata con la sintassi pagine_risultato[[x, y]]
-    # dove in realtà ogni '[x, y]' è un hash per un relativo valore
+    pagine_risultato = Hash.new
     x = 1
     @lista_campi_dati.each do |ricerca|
       y = 1

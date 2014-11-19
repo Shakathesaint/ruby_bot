@@ -1,13 +1,12 @@
-require 'httparty'
-
 class StaticExtractor
-	attr_reader :pagina_risultato
+	require 'httparty'
 	include HTTParty
+	attr_reader :pagina_risultato
 
 	#todo: per il momento passiamo direttamente questi valori, successivamente verranno estratti e passati dalla superclasse che gestisce statico/dinamico
-	def initialize (static_solver, lista_campi_dati, lista_dropdown = nil)
-		@page       = static_solver
-		@action_url = static_solver.action # attributo 'action' dell'elemento <input>: contiene l'url della pagina cui inviare la GET/POST
+	def initialize (page, lista_campi_dati, lista_dropdown = nil)
+		@page       = page
+		@action_url = page.action # attributo 'action' dell'elemento <input>: contiene l'url della pagina cui inviare la GET/POST
 		# alcune pagine hanno una 'action' con un url parziale, in quel caso richiamiamo il metodo base_uri di HTTParty
 		# che setta un url di base cui viene 'appesa' la stringa contenuta nell'action
 		unless @action_url.include? 'http://' # unless è un if negato
@@ -20,11 +19,6 @@ class StaticExtractor
 		end
 		hidden_inputs     = @page.get_hidden_inputs
 		@options          = compila_parametri lista_campi_dati, lista_dropdown, hidden_inputs
-
-		# @campi_dati_html = xpath_to_html lista_campi_dati
-
-		risultato         = avvia_ricerca
-		@pagina_risultato = risultato.to_s
 	end
 
 
@@ -85,7 +79,6 @@ class StaticExtractor
 
 
 	def avvia_ricerca
-
 		if is_get_method?
 			return self.class.get(@action_url, @options)
 		elsif is_post_method?
@@ -93,9 +86,9 @@ class StaticExtractor
 		else
 			# se non è presente l'attributo 'method' solitamente è implicitamente una get
 			puts 'attributo method non presente - tentativo di lanciare una get'
-			return self.class.get(@action_url, @options)
+			risultato = self.class.get(@action_url, @options)
+			risultato.to_s
 		end
-
 	end
 
 

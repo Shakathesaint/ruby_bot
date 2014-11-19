@@ -45,25 +45,7 @@ page = PageAnalyzer.new(url, xpath)
 ##############################################################################
 
 
-=begin
 
-L'utente può scegliere di passare o meno la lista_dropdown.
-Se non viene passata non verrà incluso nessun parametro relativo nella GET/POST, in questo è necessario
-che venga fornito un xpath dall'esterno per identificare in modo univoco il menu a tendina voluto (notare che finora
-i siti provati funzionano ugualmente con opzione di default se non si passano parametri relativi alla select).
-
-Se scegli di passare lista_dropdown questa può essere del tipo:
-
-{ xpath => 'opzione da selezionare' }
-
-oppure
-
-{ xpath => '' }
-
-Nell'ultimo caso verrà passato come parametro l'elemento identificato nella pagina da selected="selected" (che in HTML
-indica l'opzione di default)
-
-=end
 
 lista_dropdown = { './/*[@id="searchDropdownBox"]' => '' }
 lista_campi_dati = { xpath => 'ati radeon' }
