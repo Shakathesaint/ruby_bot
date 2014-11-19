@@ -30,6 +30,7 @@ class DynamicExtractor
 =end
   end
 
+  #todo: aggiungere la gestione dei menu a tendina
   # @return [Hash] pagine_risultato: matrice simulata con Hash, viene richiamata con la sintassi pagine_risultato[[x, y]] dove in realtà ogni '[x, y]' è un hash per un relativo valore
   def avvia_ricerca
     # ricerca X, pagina Y

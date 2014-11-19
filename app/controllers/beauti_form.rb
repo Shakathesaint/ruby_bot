@@ -12,14 +12,18 @@ E' la classe che si interfaccia col mondo esterno:
 $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
 class BeautiForm
+	require 'selenium-webdriver'
+	require 'json'
 
-	#todo: chiedere se posso generare io il driver di Selenium, sembra una scelta più logica in quanto andrebbe creato solo se la ricerca è DINAMICA
 	# @param [String] url pagina iniziale della ricerca
 	# @param [String] nomefile_json
 	def initialize(url, nomefile_json = "#{$dir}struttura_dati.json")
 		File.open(nomefile_json, 'r') do |leggi|
 			@struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
 		end
+
+		#todo: chiedere se posso generare io il driver di Selenium, sembra una scelta più logica in quanto andrebbe creato solo se la ricerca è DINAMICA
+		driver = Selenium::WebDriver.for :firefox
 
 		################  USATE SOLO DALLA RICERCA DINAMICA  #######################################################
 		next_xpath         = @struttura_dati[0]
@@ -63,14 +67,13 @@ class BeautiForm
 		if page.is_static?
 			# lancia ricerca statica
 			static_search = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
+			#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
 			@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
 		else
 			# lancia ricerca dinamica
 			dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
 			@risultato     = dynamic_search.avvia_ricerca # è una matrice rappresentante più ricerche con più pagine
 		end
-
-
 	end
 
 end

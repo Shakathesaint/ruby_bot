@@ -2,6 +2,7 @@ class DriverGenerator
   require 'selenium-webdriver'
   require 'json'
 
+  #todo: modificare la classe per adattarsi alla nuova BeautiForm
   def initialize
     @driver = Selenium::WebDriver.for :firefox
     @lista_campi_dati = []
