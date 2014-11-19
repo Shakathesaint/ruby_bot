@@ -1,7 +1,7 @@
 require 'nokogiri'
 require 'open-uri'
 
-class StaticSolver
+class PageAnalyzer
 	$dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
 	attr_reader :form, :method, :input, :on_submit, :action, :url, :on_click

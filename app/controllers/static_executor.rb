@@ -1,4 +1,4 @@
-require '../../app/controllers/static_solver'
+require '../../app/controllers/page_analyzer'
 require '../../app/controllers/static_extractor'
 
 ##############################################################################
@@ -23,7 +23,7 @@ url   = 'http://www.amazon.it'
 xpath = './/*[@id="twotabsearchtextbox"]'
 
 
-page             = StaticSolver.new(url, xpath)
+page = PageAnalyzer.new(url, xpath)
 
 
 ##############################################################################
@@ -32,7 +32,7 @@ page             = StaticSolver.new(url, xpath)
 # static = page.is_static?
 # static = site.is_static? './/*[@id="search"]'
 
-# site = StaticSolver.new 'http://www.amazon.it'
+# site = PageAnalyzer.new 'http://www.amazon.it'
 # static = site.is_static? './/*[@id="twotabsearchtextbox"]'
 
 
