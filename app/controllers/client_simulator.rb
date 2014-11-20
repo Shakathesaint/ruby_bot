@@ -1,13 +1,17 @@
-class DriverGenerator
+class ClientSimulator
+  attr_accessor :url
   require 'selenium-webdriver'
   require 'json'
 
   #todo: modificare la classe per adattarsi alla nuova BeautiForm
-  def initialize
-    @driver = Selenium::WebDriver.for :firefox
+  def initialize(url_ricerca)
+    # @driver = Selenium::WebDriver.for :firefox
+    @url               = url_ricerca
     @lista_campi_dati = []
+    @lista_dropdown    = []
     @struttura_dati = []
     @struttura_dati[2] = @lista_campi_dati
+    @struttura_dati[3] = @lista_dropdown unless @lista_dropdown.size == 0
   end
 
   # @param [String] dati - nome del file .json da creare (opzionale)
@@ -22,10 +26,10 @@ class DriverGenerator
   # metodi SETTER
   ###############
 
-  # @param [String] url
-  def goto_site=(url)
-    @driver.navigate.to url
-  end
+  # # @param [String] url
+  # def goto_site=(url)
+  #   @driver.navigate.to url
+  # end
 
   # @param [String] xpath
   def next_xpath=(xpath)

@@ -1,7 +1,7 @@
-require '../../app/controllers/driver_generator'
+require '../../app/controllers/client_simulator'
 require '../../app/controllers/dynamic_extractor'
 
-stub_dati = DriverGenerator.new
+stub_dati = ClientSimulator.new
 stub_dati.next_xpath = '//*[@title="Vai alla pagina successiva"]'
 stub_dati.page_loaded_xpath = '//*[@id="pager"]'
 stub_dati.add_ricerca '//*[@id="searchField"]' => 'Bianchi'

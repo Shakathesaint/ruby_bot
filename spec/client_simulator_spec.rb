@@ -1,18 +1,18 @@
 require 'spec_helper'
-require_relative '../app/controllers/driver_generator'
+require_relative '../app/controllers/client_simulator'
 
-describe DriverGenerator do
+describe ClientSimulator do
 
   describe '#inizialize' do
     after(:each) do
-      @driverGenerator.driver.quit
+      @client.driver.quit
     end
 
     context 'given valid data' do
       it 'crea un driver' do
-        @driverGenerator = DriverGenerator.new
-        puts defined?(@driverGenerator).nil?
-        defined?(@driverGenerator).should_not be_nil
+        @client = ClientSimulator.new
+        puts defined?(@client).nil?
+        defined?(@client).should_not be_nil
       end
     end
   end
@@ -21,22 +21,22 @@ describe DriverGenerator do
     before(:all) do
       # cancella tutti i file .json preesistenti
       Dir.glob('./app/controllers/*.json') { |filename| File.delete(filename) }
-      @driverGenerator = DriverGenerator.new
+      @client = ClientSimulator.new
     end
     after(:all) do
-      @driverGenerator.driver.quit
+      @client.driver.quit
     end
 
     context 'given a parameter' do
       it 'crea un file col nome passato' do
-        @driverGenerator.to_file_json(name = './app/controllers/prova.json')
+        @client.to_file_json(name = './app/controllers/prova.json')
         File.exist?(name).should be true
       end
     end
 
     context 'not given a parameter' do
       it 'crea un file col nome strutturaDati.json' do
-        @driverGenerator.to_file_json
+        @client.to_file_json
         File.exist?('./app/controllers/strutturaDati.json').should be true
       end
     end
@@ -44,13 +44,13 @@ describe DriverGenerator do
 
   describe '#driver' do
     after(:each) do
-      @driverGenerator.driver.quit
+      @client.driver.quit
     end
 
-    context 'given a DriverGenerator object' do
+    context 'given a ClientSimulator object' do
       it 'restituisce una variabile di tipo WebDriver' do
-        @driverGenerator = DriverGenerator.new
-        @driverGenerator.driver.class.to_s.should be == 'Selenium::WebDriver::Driver'
+        @client = ClientSimulator.new
+        @client.driver.class.to_s.should be == 'Selenium::WebDriver::Driver'
       end
     end
   end

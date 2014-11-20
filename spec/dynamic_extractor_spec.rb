@@ -1,14 +1,14 @@
 require 'rspec'
 require 'headless'
 
-require_relative '../app/controllers/driver_generator'
+require_relative '../app/controllers/client_simulator'
 require_relative '../app/controllers/dynamic_extractor'
 
 describe DynamicExtractor do
   before(:each) do
     # @headless = Headless.new
     # @headless.start
-    @stub_dati = DriverGenerator.new
+    @stub_dati = ClientSimulator.new
   end
   after(:each) do
     @stub_dati.driver.quit
@@ -21,7 +21,7 @@ describe DynamicExtractor do
 
       it 'crea @struttura_dati coerente con il file .json passato come parametro' do
         #############################################
-        # crea una struttura dati con DriverGenerator
+        # crea una struttura dati con ClientSimulator
         next_xpath = '//*[@title="Vai alla pagina successiva"]'
         page_loaded_xpath = '//*[@id="pager"]'
         r1 = {'//*[@id="searchField"]' => 'Bianchi'}
