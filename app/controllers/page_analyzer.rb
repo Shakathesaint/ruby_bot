@@ -46,6 +46,7 @@ class PageAnalyzer
 	def get_form (xpath)
 		# risalgo al form di appartenenza - nota: a priori un xpath non è univoco, per questo
 		# in realtà blocco[] è un array di risultati
+		#todo: se si è passati un xpath inesistente blocco = nil perciò blocco[0].name da 'undefined method': prevedere in caso di gestire l'eccezione
 		blocco = @doc.xpath(xpath)
 		#chiamata ricorsiva
 		if blocco[0].name == 'form' # blocco[0].class = Nokogiri::XML::Element

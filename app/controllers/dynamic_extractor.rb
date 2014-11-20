@@ -12,37 +12,21 @@ class DynamicExtractor
 
     @next_xpath         = next_xpath
     @marker_fine_pagina = marker_fine_pagina
-    @lista_campi_dati   = lista_campi_dati
-
-=begin
-    # crea una mappa a partire dal file .json passato
-    File.open(nomefile_json, 'r') do |leggi|
-      @struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
-    end
-
-    @next_xpath = @struttura_dati[0]
-    # @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente.
-    # Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento
-    # è consigliato di evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
-    # nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
-    @marker_fine_pagina = @struttura_dati[1]
-    @lista_campi_dati = @struttura_dati[2]
-=end
+    @lista_campi_dati = lista_campi_dati #array di n ricerche da effettuare
   end
 
   #todo: aggiungere la gestione dei menu a tendina
   # @return [Hash] pagine_risultato: matrice simulata con Hash, viene richiamata con la sintassi pagine_risultato[[x, y]] dove in realtà ogni '[x, y]' è un hash per un relativo valore
   def avvia_ricerca
     # ricerca X, pagina Y
-
     pagine_risultato = Hash.new
     x = 1
+    #todo: per ogni elemento dell'array lista_campi_dati[i] deve corrispondere uno lista_dropdown[i] potenzialmente di valore nil
     @lista_campi_dati.each do |ricerca|
       y = 1
       campo_input = nil
       ricerca.each do |nomeCampo, testoCampo|
         # continua a riempire i campi finché richiesto
-        # la variabile element deve essere globale ($) per poter essere vista dall'esterno del blocco precedente
         campo_input = @driver.find_element(xpath: "#{nomeCampo}")
         campo_input.clear # garantisce che non si scriva sopra ai valori di default del campo
         campo_input.send_keys "#{testoCampo}"

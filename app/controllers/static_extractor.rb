@@ -3,7 +3,9 @@ class StaticExtractor
 	include HTTParty
 	attr_reader :pagina_risultato
 
-	#todo: per il momento passiamo direttamente questi valori, successivamente verranno estratti e passati dalla superclasse che gestisce statico/dinamico
+	# @param [String] page
+	# @param [Hash] lista_campi_dati
+	# @param [Hash] lista_dropdown
 	def initialize (page, lista_campi_dati, lista_dropdown = nil)
 		@page       = page
 		@action_url = page.action # attributo 'action' dell'elemento <input>: contiene l'url della pagina cui inviare la GET/POST

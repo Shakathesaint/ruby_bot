@@ -14,29 +14,44 @@ $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 class BeautiForm
 	require 'selenium-webdriver'
 	require 'json'
+	require '../../app/controllers/page_analyzer'
 
 	# @param [String] url pagina iniziale della ricerca
-	# @param [String] nomefile_json
-	# @param [Hash] mode può assumere i valori {force: static} o {force: dynamic}, se lasciato vuoto viene deciso in automatico se lanciare una ricerca statica o dinamica
-	def initialize(url, nomefile_json = "#{$dir}struttura_dati.json", mode = nil)
+	def initialize(options = {})
+		# def initialize(url, nomefile_json = "#{$dir}struttura_dati.json", mode = nil)
+		nomefile_json = options[:import] ||= "#{$dir}struttura_dati.json"
+		# mode può assumere i valori {force: static} o {force: dynamic},
+		# se lasciato vuoto viene deciso in automatico se lanciare una ricerca statica o dinamica
+		mode          = options[:force] ||= nil
+
+
 		File.open(nomefile_json, 'r') do |leggi|
 			@struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
 		end
 
+		url                = @struttura_dati['url']
+
 		#todo: chiedere se posso generare io il driver di Selenium, sembra una scelta più logica in quanto andrebbe creato solo se la ricerca è DINAMICA
-		driver = Selenium::WebDriver.for :firefox
 
 		################  USATE SOLO DALLA RICERCA DINAMICA  #######################################################
-		next_xpath         = @struttura_dati[0]
+		next_xpath         = @struttura_dati['next_xpath']
 		# @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente.
 		# Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento
 		# è consigliato di evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
 		# nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
-		marker_fine_pagina = @struttura_dati[1]
+		marker_fine_pagina = @struttura_dati['marker_fine_pagina']
 		############################################################################################################
 
-		lista_campi_dati   = @struttura_dati[2]
+		lista_campi_dati   = []
+		lista_dropdown     = []
 
+		ricerche = @struttura_dati['ricerche'] #array
+		ricerche.each do |ricerca|
+			lista_campi_dati << ricerca[0]
+			lista_dropdown << ricerca[1]
+		end
+
+		#todo non è vero che viene usato solo dalla ricerca statica: implementare per ricerca dinamica
 		################  USATA SOLO DALLA RICERCA STATICA  ########################################################
 		# 	L'utente può scegliere di passare o meno la lista_dropdown.
 		#   Se non viene passata non verrà incluso nessun parametro relativo nella GET/POST, in quanto è necessario
@@ -54,41 +69,39 @@ class BeautiForm
 		# 	Nell'ultimo caso verrà passato come parametro l'elemento identificato nella pagina da selected="selected" (che in HTML
 		# 	indica l'opzione di default)
 
-		if @struttura_dati[3].nil?
-			lista_dropdown = nil
-		else
-			lista_dropdown = @struttura_dati[3]
-		end
+		# if @struttura_dati[3].nil?
+		# 	lista_dropdown = nil
+		# else
+		# 	lista_dropdown = ricerche[0][1]
+		# end
 		############################################################################################################
 
-		xpath_primo_campo = lista_campi_dati.keys[0]
+		xpath_primo_campo = lista_campi_dati[0].keys.first
 
 		page = PageAnalyzer.new(url, xpath_primo_campo)
 
-		case mode[:force]
-			when nil
+		case mode
+			when 'static'
+				# lancia ricerca statica
+				static_search = StaticExtractor.new(page, lista_campi_dati[0], lista_dropdown[0])
+				@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+			when 'dynamic'
+				# lancia ricerca dinamica
+				driver = Selenium::WebDriver.for :firefox
+				dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
+				@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+			else # comportamento di default (se non viene forzata una modalità)
 				if page.is_static?
 					# lancia ricerca statica
-					static_search = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
+					static_search = StaticExtractor.new(page, lista_campi_dati[0], lista_dropdown[0])
 					#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
 					@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
 				else
 					# lancia ricerca dinamica
+					driver         = Selenium::WebDriver.for :firefox
 					dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
 					@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
 				end
-			when 'static'
-				# lancia ricerca statica
-				static_search = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
-				@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
-			when 'dynamic'
-				# lancia ricerca dinamica
-				dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
-				@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
 		end
-	end
-
-	def ricerca_statica
-
 	end
 end
