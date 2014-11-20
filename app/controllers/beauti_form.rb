@@ -17,7 +17,8 @@ class BeautiForm
 
 	# @param [String] url pagina iniziale della ricerca
 	# @param [String] nomefile_json
-	def initialize(url, nomefile_json = "#{$dir}struttura_dati.json")
+	# @param [Hash] mode può assumere i valori {force: static} o {force: dynamic}, se lasciato vuoto viene deciso in automatico se lanciare una ricerca statica o dinamica
+	def initialize(url, nomefile_json = "#{$dir}struttura_dati.json", mode = nil)
 		File.open(nomefile_json, 'r') do |leggi|
 			@struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
 		end
@@ -64,16 +65,30 @@ class BeautiForm
 
 		page = PageAnalyzer.new(url, xpath_primo_campo)
 
-		if page.is_static?
-			# lancia ricerca statica
-			static_search = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
-			#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
-			@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
-		else
-			# lancia ricerca dinamica
-			dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
-			@risultato     = dynamic_search.avvia_ricerca # è una matrice rappresentante più ricerche con più pagine
+		case mode[:force]
+			when nil
+				if page.is_static?
+					# lancia ricerca statica
+					static_search = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
+					#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
+					@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+				else
+					# lancia ricerca dinamica
+					dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
+					@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+				end
+			when 'static'
+				# lancia ricerca statica
+				static_search = StaticExtractor.new(page, lista_campi_dati, lista_dropdown)
+				@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+			when 'dynamic'
+				# lancia ricerca dinamica
+				dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
+				@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
 		end
 	end
 
+	def ricerca_statica
+
+	end
 end
