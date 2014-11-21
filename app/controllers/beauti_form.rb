@@ -109,7 +109,7 @@ class BeautiForm
 			@driver          = Selenium::WebDriver.for :firefox
 			@driver.navigate.to @url
 		end
-		dynamic_search = DynamicExtractor.new(@driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati)
+		dynamic_search = DynamicExtractor.new(@driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati, @lista_dropdown)
 		r              = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
 		@driver.quit if must_quit_driver
 		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato

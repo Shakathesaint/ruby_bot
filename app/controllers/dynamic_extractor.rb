@@ -6,13 +6,15 @@ class DynamicExtractor
 	attr_reader :lista_campi_dati
 
 	# def initialize(driver, nomefile_json = "#{$dir}struttura_dati.json")
-	def initialize(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
+	def initialize(driver, next_xpath, marker_fine_pagina, lista_campi_dati, lista_dropdown = nil)
 		@driver          = driver
 		@pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca
 
 		@next_xpath         = next_xpath
 		@marker_fine_pagina = marker_fine_pagina
 		@lista_campi_dati   = lista_campi_dati #array di n ricerche da effettuare
+		@lista_dropdown = lista_dropdown #array di n elementi menu a tendina
+		#todo: controllare la struttura: è verificato che per ogni ricerca posso avere n campi menu a tendina?
 	end
 
 	#todo: aggiungere la gestione dei menu a tendina
@@ -22,6 +24,8 @@ class DynamicExtractor
 		pagine_risultato = Hash.new
 		x                = 1
 		#todo: per ogni elemento dell'array lista_campi_dati[i] deve corrispondere uno lista_dropdown[i] potenzialmente di valore nil
+		# il problema è trovare un modo per operare contemporaneamente su lista_campi_dati[i] e lista_dropdown[i]
+		# .each penso valga per un singolo array
 		@lista_campi_dati.each do |ricerca|
 			y           = 1
 			campo_input = nil
