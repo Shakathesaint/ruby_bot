@@ -12,9 +12,12 @@ E' la classe che si interfaccia col mondo esterno:
 $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
 class BeautiForm
+	attr_reader :risultato
 	require 'selenium-webdriver'
 	require 'json'
 	require '../../app/controllers/page_analyzer'
+	require '../../app/controllers/static_extractor'
+	require '../../app/controllers/dynamic_extractor'
 
 	# @param [String] url pagina iniziale della ricerca
 	def initialize(options = {})
@@ -83,6 +86,8 @@ class BeautiForm
 		case mode
 			when 'static'
 				# lancia ricerca statica
+				# nella ricerca statica viene effettuata una sola ricerca (la prima)
+				#todo: si può introdurre un ciclo per fare più ricerche consecutive (il risultato però sarà sempre solo la prima pagina)
 				static_search = StaticExtractor.new(page, lista_campi_dati[0], lista_dropdown[0])
 				@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
 			when 'dynamic'

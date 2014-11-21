@@ -1,9 +1,8 @@
 class StaticExtractor
 	require 'httparty'
 	include HTTParty
-	attr_reader :pagina_risultato
 
-	# @param [String] page
+	# @param [PageAnalyzer] page
 	# @param [Hash] lista_campi_dati
 	# @param [Hash] lista_dropdown
 	def initialize (page, lista_campi_dati, lista_dropdown = nil)
@@ -80,17 +79,18 @@ class StaticExtractor
 	end
 
 
+	# @return [String] codice HTML della pagina risultato
 	def avvia_ricerca
 		if is_get_method?
-			return self.class.get(@action_url, @options)
+			risultato = self.class.get(@action_url, @options)
 		elsif is_post_method?
-			return self.class.post(@action_url, @options)
+			risultato = self.class.post(@action_url, @options)
 		else
 			# se non è presente l'attributo 'method' solitamente è implicitamente una get
 			puts 'attributo method non presente - tentativo di lanciare una get'
 			risultato = self.class.get(@action_url, @options)
-			risultato.to_s
 		end
+		risultato.to_s
 	end
 
 
