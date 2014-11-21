@@ -37,21 +37,21 @@ class BeautiForm
 		#todo: chiedere se posso generare io il driver di Selenium, sembra una scelta più logica in quanto andrebbe creato solo se la ricerca è DINAMICA
 
 		################  USATE SOLO DALLA RICERCA DINAMICA  #######################################################
-		next_xpath         = @struttura_dati['next_xpath']
+		@next_xpath         = @struttura_dati['next_xpath']
 		# @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente.
 		# Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento
 		# è consigliato di evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
 		# nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
-		marker_fine_pagina = @struttura_dati['marker_fine_pagina']
+		@marker_fine_pagina = @struttura_dati['marker_fine_pagina']
 		############################################################################################################
 
-		lista_campi_dati   = []
-		lista_dropdown     = []
+		@lista_campi_dati   = []
+		@lista_dropdown     = []
 
 		ricerche = @struttura_dati['ricerche'] #array
 		ricerche.each do |ricerca|
-			lista_campi_dati << ricerca[0]
-			lista_dropdown << ricerca[1]
+			@lista_campi_dati << ricerca[0]
+			@lista_dropdown << ricerca[1]
 		end
 
 		#todo non è vero che viene usato solo dalla ricerca statica: implementare per ricerca dinamica
@@ -79,34 +79,36 @@ class BeautiForm
 		# end
 		############################################################################################################
 
-		xpath_primo_campo = lista_campi_dati[0].keys.first
+		xpath_primo_campo = @lista_campi_dati[0].keys.first
 
-		page = PageAnalyzer.new(url, xpath_primo_campo)
+		@page = PageAnalyzer.new(url, xpath_primo_campo)
 
+		#todo aggiungere una variabile di ritorno aggiuntiva che indichi se la ricerca è stata fatta in modo dinamico o statico
 		case mode
 			when 'static'
-				# lancia ricerca statica
-				# nella ricerca statica viene effettuata una sola ricerca (la prima)
-				#todo: si può introdurre un ciclo per fare più ricerche consecutive (il risultato però sarà sempre solo la prima pagina)
-				static_search = StaticExtractor.new(page, lista_campi_dati[0], lista_dropdown[0])
-				@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+				ricerca_statica
 			when 'dynamic'
-				# lancia ricerca dinamica
-				driver = Selenium::WebDriver.for :firefox
-				dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
-				@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+				ricerca_dinamica
 			else # comportamento di default (se non viene forzata una modalità)
-				if page.is_static?
-					# lancia ricerca statica
-					static_search = StaticExtractor.new(page, lista_campi_dati[0], lista_dropdown[0])
-					#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
-					@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+				if @page.is_static?
+					ricerca_statica
 				else
-					# lancia ricerca dinamica
-					driver         = Selenium::WebDriver.for :firefox
-					dynamic_search = DynamicExtractor.new(driver, next_xpath, marker_fine_pagina, lista_campi_dati)
-					@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+					ricerca_dinamica
 				end
 		end
+	end
+
+	def ricerca_statica
+		# nella ricerca statica viene effettuata una sola ricerca (la prima)
+		#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
+		#todo: si può introdurre un ciclo per fare più ricerche consecutive (il risultato però sarà sempre solo la prima pagina)
+		static_search = StaticExtractor.new(@page, @lista_campi_dati[0], @lista_dropdown[0])
+		@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+	end
+
+	def ricerca_dinamica
+		driver         = Selenium::WebDriver.for :firefox
+		dynamic_search = DynamicExtractor.new(driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati)
+		@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
 	end
 end
