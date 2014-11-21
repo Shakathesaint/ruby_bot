@@ -32,7 +32,7 @@ class BeautiForm
 			@struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
 		end
 
-		url                = @struttura_dati['url']
+		@url = @struttura_dati['url']
 
 		#todo: chiedere se posso generare io il driver di Selenium, sembra una scelta più logica in quanto andrebbe creato solo se la ricerca è DINAMICA
 
@@ -71,19 +71,12 @@ class BeautiForm
 		#
 		# 	Nell'ultimo caso verrà passato come parametro l'elemento identificato nella pagina da selected="selected" (che in HTML
 		# 	indica l'opzione di default)
-
-		# if @struttura_dati[3].nil?
-		# 	lista_dropdown = nil
-		# else
-		# 	lista_dropdown = ricerche[0][1]
-		# end
 		############################################################################################################
 
 		xpath_primo_campo = @lista_campi_dati[0].keys.first
 
-		@page = PageAnalyzer.new(url, xpath_primo_campo)
+		@page = PageAnalyzer.new(@url, xpath_primo_campo)
 
-		#todo aggiungere una variabile di ritorno aggiuntiva che indichi se la ricerca è stata fatta in modo dinamico o statico
 		case mode
 			when 'static'
 				ricerca_statica
@@ -103,12 +96,18 @@ class BeautiForm
 		#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
 		#todo: si può introdurre un ciclo per fare più ricerche consecutive (il risultato però sarà sempre solo la prima pagina)
 		static_search = StaticExtractor.new(@page, @lista_campi_dati[0], @lista_dropdown[0])
-		@risultato    = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+		r          = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
+		@risultato = { pagine: r, mode: :static }
 	end
 
 	def ricerca_dinamica
-		driver         = Selenium::WebDriver.for :firefox
+		driver = Selenium::WebDriver.for :firefox
+		driver.navigate.to @url
 		dynamic_search = DynamicExtractor.new(driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati)
-		@risultato     = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+		r = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+		driver.quit
+		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
+		@risultato = { pagine: r, mode: :dynamic }
 	end
 end

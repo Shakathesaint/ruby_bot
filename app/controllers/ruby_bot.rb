@@ -17,8 +17,13 @@ client.add_ricerca({ '//*[@id="searchField"]' => 'Bianchi',
 client.add_ricerca '//*[@id="searchField"]' => 'Verdi'
 client.to_file_json
 
-seeker = BeautiForm.new force: 'dynamic'
-puts seeker.risultato
+seeker = BeautiForm.new force: 'static'
+
+puts '====== CODICE HTML ======'
+puts seeker.risultato[:pagine]
+
+puts '====== MODALITA\' ========'
+puts seeker.risultato[:mode]
 
 
 ##############################################################################################
