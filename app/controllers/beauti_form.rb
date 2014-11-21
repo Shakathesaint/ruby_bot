@@ -26,7 +26,8 @@ class BeautiForm
 		# mode può assumere i valori {force: static} o {force: dynamic},
 		# se lasciato vuoto viene deciso in automatico se lanciare una ricerca statica o dinamica
 		mode          = options[:force] ||= nil
-
+		# il driver può essere passato come parametro alla classe o creato dal metodo ricerca_dinamica
+		@driver = options[:driver] ||= nil
 
 		File.open(nomefile_json, 'r') do |leggi|
 			@struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
@@ -102,11 +103,15 @@ class BeautiForm
 	end
 
 	def ricerca_dinamica
-		driver = Selenium::WebDriver.for :firefox
-		driver.navigate.to @url
-		dynamic_search = DynamicExtractor.new(driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati)
-		r = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
-		driver.quit
+		# se il driver non è stato passato come parametro alla creazione dell'istanza di BeautiForm lo creo io
+		if @driver == nil
+			must_quit_driver = true
+			@driver          = Selenium::WebDriver.for :firefox
+			@driver.navigate.to @url
+		end
+		dynamic_search = DynamicExtractor.new(@driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati)
+		r              = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+		@driver.quit if must_quit_driver
 		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
 		@risultato = { pagine: r, mode: :dynamic }
 	end
