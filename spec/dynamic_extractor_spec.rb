@@ -159,7 +159,7 @@ describe DynamicExtractor do
 
   end
 
-  describe '#wait_page_load' do
+  describe '#wait_for_page_load' do
 
   end
 

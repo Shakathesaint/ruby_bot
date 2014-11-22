@@ -9,7 +9,12 @@ class PageAnalyzer
 
 	def initialize (url, campo_dati_xpath)
 		@url = url
-		@doc = Nokogiri::HTML(open(url))
+		begin
+			@doc = Nokogiri::HTML(open(url))
+		rescue => e
+			puts "URL richiesto mal formato -- #{e}"
+			raise
+		end
 
 		@form      = get_form(campo_dati_xpath)
 		form_xpath = form[0].path

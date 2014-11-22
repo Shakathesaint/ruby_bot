@@ -39,10 +39,16 @@ class BeautiForm
 
 		################  USATE SOLO DALLA RICERCA DINAMICA  #######################################################
 		@next_xpath         = @struttura_dati['next_xpath']
+
+
 		# @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente.
-		# Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento
-		# è consigliato di evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
-		# nella pagina qualora la ricerca non dia risultati o dia risultati di una sola pagina
+		# Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento.
+		# E' consigliato evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
+		# nella pagina qualora la ricerca non desse risultati o desse risultati di una sola pagina
+
+		# NOTA: @marker_fine_pagina può essere anche completamente omesso, nel qual caso verrà utilizzato un sistema
+		# di identificazione automatica del completato caricamento basato su check a intervalli temporali
+		# (vedi metodo wait_page_load_timed in DynamicExtractor)
 		@marker_fine_pagina = @struttura_dati['marker_fine_pagina']
 		############################################################################################################
 

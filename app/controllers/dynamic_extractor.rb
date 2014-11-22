@@ -12,8 +12,8 @@ class DynamicExtractor
 
 		@next_xpath         = next_xpath
 		@marker_fine_pagina = marker_fine_pagina
-		@lista_campi_dati   = lista_campi_dati #array di n ricerche da effettuare
-		@lista_dropdown = lista_dropdown #array di n elementi menu a tendina
+		@lista_campi_dati = lista_campi_dati #array di n ricerche da effettuare - ogni elemento è un hash di xpath_campo => valore
+		@lista_dropdown   = lista_dropdown #array di n ricerche - ogni elemento è un hash di xpath_menu_tendina => valore da selezionare
 		#todo: controllare la struttura: è verificato che per ogni ricerca posso avere n campi menu a tendina?
 	end
 
@@ -24,22 +24,31 @@ class DynamicExtractor
 		pagine_risultato = Hash.new
 		x                = 1
 		#todo: per ogni elemento dell'array lista_campi_dati[i] deve corrispondere uno lista_dropdown[i] potenzialmente di valore nil
-		# il problema è trovare un modo per operare contemporaneamente su lista_campi_dati[i] e lista_dropdown[i]
-		# .each penso valga per un singolo array
-		@lista_campi_dati.each do |ricerca|
+		# la sintassi seguente permette di operare parallelamente sui due vettori lista_campi_dati, lista_dropdown
+		(0..@lista_campi_dati.size-1).each do |i|
+			ricerca_campi    = @lista_campi_dati[i]
+			ricerca_dropdown = @lista_dropdown[i]
 			y           = 1
 			campo_input = nil
-			ricerca.each do |nomeCampo, testoCampo|
-				# continua a riempire i campi finché richiesto
-				campo_input = @driver.find_element(xpath: "#{nomeCampo}")
+			ricerca_campi.each do |xpath_campo, testo_campo|
+				# riempie tutti i campi dati
+				campo_input = @driver.find_element(xpath: "#{xpath_campo}")
 				campo_input.clear # garantisce che non si scriva sopra ai valori di default del campo
-				campo_input.send_keys "#{testoCampo}"
+				campo_input.send_keys "#{testo_campo}"
+			end
+			unless ricerca_dropdown.nil?
+				# se ci sono compila tutti i menu a tendina
+				ricerca_dropdown.each do |xpath_dropdown, selezione|
+					dropdown    = @driver.find_element(xpath: "#{xpath_dropdown}")
+					select_list = Selenium::WebDriver::Support::Select.new (dropdown)
+					select_list.select_by(:text, "#{selezione}")
+				end
 			end
 
 			# avvia la ricerca
 			campo_input.submit
-
-			wait_page_load
+			
+			wait_for_page_load
 
 			@next_page    = set_next_button(@next_xpath)
 			old_next_page = nil
@@ -64,7 +73,7 @@ class DynamicExtractor
 
 				click(@next_page)
 
-				wait_page_load
+				wait_for_page_load
 
 				@next_page = set_next_button(@next_xpath)
 			end
@@ -95,15 +104,59 @@ class DynamicExtractor
 		end
 	end
 
-	def wait_page_load
+	def wait_for_page_load
+		if @marker_fine_pagina.nil?
+			wait_page_load_timed(10)
+		else
+			wait_page_load_manual
+		end
+	end
+	
+	#
+	# Si basa sul passaggio dell'xpath di un elemento che indica il completo caricamento della pagina.
+	# Finché tale elemento non è presente la pagina non viene considerata caricata completamente
+	#
+	def wait_page_load_manual
 		begin
 			wait = Selenium::WebDriver::Wait.new(:timeout => 10)
 			wait.until { @driver.find_element(xpath: @marker_fine_pagina).displayed? }
 		rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
-			errore(e)
-			wait_page_load
+			# cattura l'eccezione StaleElementReferenceError che si verifica quando qualche elemento
+			# viene cambiato nella pagina prima ancora che possa essere clickato il pulsante. Successivamente il metodo
+			# viene rilanciato ricorsivamente finché la pagina non presenta più cambiamenti
+			errore("Non è stato trovato un marker_fine_pagina valido -- #{e}")
+			wait_page_load_manual
 		end
 	end
+
+	#
+	# Si basa su un sistema di individuazione automatica (con timeout) del caricamento della pagina per determinare
+	# se la pagina ha completato il caricamento
+	#
+	# @param [Float] timeout tempo massimo di attesa in secondi prima di abortire il caricamento
+	# @return [Bool] true se la pagina ha completato il caricamento, false altrimenti
+	def wait_page_load_timed(timeout)
+		# current_size rappresenta la dimensione totale della pagina, questa viene misurata ad intervalli di tempo
+		# dati da time_slice_sec: quando la dimensione non varia più la pagina viene considerata completamente caricata
+		current_size   = 0
+		timeout_sec    = timeout
+		time_slice_sec = 1
+
+		loop do
+			previous_size = current_size
+			sleep(time_slice_sec)
+			timeout_sec = timeout_sec - time_slice_sec
+
+			current_size = @driver.find_element(xpath: '//*').size
+
+			break if  timeout_sec > 0 and previous_size == current_size
+		end
+		unless timeout_sec > 0
+			errore('La pagina non ha completato il caricamento')
+			raise
+		end
+	end
+
 
 	def set_next_button(next_xpath)
 		elementi_corrispondenti = @driver.find_elements(xpath: next_xpath)
@@ -132,6 +185,6 @@ class DynamicExtractor
 	end
 
 	def errore(e)
-		puts "catturata eccezione: #{e} : #{e.backtrace.inspect}"
+		puts "catturata eccezione: #{e}" # : #{e.backtrace.inspect}"
 	end
 end
