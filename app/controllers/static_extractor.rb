@@ -18,8 +18,8 @@ class StaticExtractor
 			homepage_url = @page.url
 			self.class.base_uri homepage_url
 		end
-		hidden_inputs     = @page.get_hidden_inputs
-		@options          = compila_parametri lista_campi_dati, lista_dropdown, hidden_inputs
+		hidden_inputs = @page.get_hidden_inputs
+		@options      = compila_parametri lista_campi_dati, lista_dropdown, hidden_inputs
 	end
 
 
@@ -81,6 +81,7 @@ class StaticExtractor
 
 	# @return [String] codice HTML della pagina risultato
 	def avvia_ricerca
+		#todo: aggiungere la possibilità di stampare i risultati su file, come per dynamic_extractor
 		if is_get_method?
 			risultato = self.class.get(@action_url, @options)
 		elsif is_post_method?
@@ -107,5 +108,4 @@ class StaticExtractor
 		end
 		return campi_dati_html
 	end
-
 end

@@ -12,18 +12,16 @@ class DynamicExtractor
 
 		@next_xpath         = next_xpath
 		@marker_fine_pagina = marker_fine_pagina
-		@lista_campi_dati = lista_campi_dati #array di n ricerche da effettuare - ogni elemento è un hash di xpath_campo => valore
-		@lista_dropdown   = lista_dropdown #array di n ricerche - ogni elemento è un hash di xpath_menu_tendina => valore da selezionare
-		#todo: controllare la struttura: è verificato che per ogni ricerca posso avere n campi menu a tendina?
+		@lista_campi_dati = lista_campi_dati #array di n ricerche da effettuare - ogni elemento è un hash di coppie xpath_campo => valore
+		@lista_dropdown   = lista_dropdown #array di n ricerche - ogni elemento è un hash di coppie xpath_menu_tendina => valore da selezionare
 	end
 
-	#todo: aggiungere la gestione dei menu a tendina
 	# @return [Hash] pagine_risultato: matrice simulata con Hash, viene richiamata con la sintassi pagine_risultato[[x, y]] dove in realtà ogni '[x, y]' è un hash per un relativo valore
 	def avvia_ricerca
 		# ricerca X, pagina Y
 		pagine_risultato = Hash.new
 		x                = 1
-		#todo: per ogni elemento dell'array lista_campi_dati[i] deve corrispondere uno lista_dropdown[i] potenzialmente di valore nil
+
 		# la sintassi seguente permette di operare parallelamente sui due vettori lista_campi_dati, lista_dropdown
 		(0..@lista_campi_dati.size-1).each do |i|
 			ricerca_campi    = @lista_campi_dati[i]

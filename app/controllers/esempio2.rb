@@ -6,11 +6,11 @@ require '../../app/controllers/beauti_form'
 ##############################################################################################
 #######  Questo può diventare un test per la classe BeautiForm  ##############################
 
-client = ClientSimulator.new 'http://www.amazon.it'
-client.next_xpath        = '//*[@id="pagnNextLink"]'
+client            = ClientSimulator.new 'http://www.amazon.it'
+client.next_xpath = '//*[@id="pagnNextLink"]'
 # client.page_loaded_xpath = './/*[@id="rightContainerATF"]'
-r1                       = { '//*[@id="twotabsearchtextbox"]' => 'asus g750jx' }
-drop1  = { '//*[@id="searchDropdownBox"]' => 'Abbigliamento' }
+r1                = { '//*[@id="twotabsearchtextbox"]' => 'asus g750jx' }
+drop1             = { '//*[@id="searchDropdownBox"]' => 'Abbigliamento' }
 client.add_ricerca r1 #, drop1
 client.to_file_json
 

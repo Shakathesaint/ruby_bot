@@ -61,8 +61,7 @@ class BeautiForm
 			@lista_dropdown << ricerca[1]
 		end
 
-		#todo non è vero che viene usato solo dalla ricerca statica: implementare per ricerca dinamica
-		################  USATA SOLO DALLA RICERCA STATICA  ########################################################
+		################  MODALITA' D'USO DI lista_dropdown  #######################################################
 		# 	L'utente può scegliere di passare o meno la lista_dropdown.
 		#   Se non viene passata non verrà incluso nessun parametro relativo nella GET/POST, in quanto è necessario
 		#   che venga fornito un xpath dall'esterno per identificare in modo univoco il menu a tendina voluto (notare che finora
