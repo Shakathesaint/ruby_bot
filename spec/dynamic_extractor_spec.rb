@@ -71,6 +71,7 @@ describe DynamicExtractor do
         seeker = BeautiForm.new force: 'dynamic'
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
+        # seeker.salva_su_file pagine
         pagine[[0, 0]].should_not be_nil
         pagine[[1, 0]].should be_nil
         mode.should be == :dynamic

@@ -59,9 +59,11 @@ class DynamicExtractor
 				# pagine_risultato[x][y]
 				html_source                  = @driver.page_source
 				pagine_risultato[[x-1, y-1]] = html_source
-				File.open($dir.to_s + 'file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
-					scrivi << html_source
-				end
+
+				# LA STAMPA SU FILE E' ORA GESTITA DALLA CLASSE BeautiForm
+				# File.open($dir.to_s + 'file_r' + x.to_s + 'p' + y.to_s + '.html', 'w') do |scrivi|
+				# 	scrivi << html_source
+				# end
 
 				y += 1 # incrementa il numero di pagina
 				break if @next_page.nil? or old_next_page == @next_page # esce se non c'è più il tasto next oppure

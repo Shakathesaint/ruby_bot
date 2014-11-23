@@ -102,9 +102,10 @@ class BeautiForm
 		#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
 		#todo: si può introdurre un ciclo per fare più ricerche consecutive (il risultato però sarà sempre solo la prima pagina)
 		static_search = StaticExtractor.new(@page, @lista_campi_dati[0], @lista_dropdown[0])
-		r          = static_search.avvia_ricerca # è una stringa rappresentante una singola pagina HTML
+		# 'ris' è una STRINGA rappresentante una singola pagina HTML
+		ris        = static_search.avvia_ricerca
 		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
-		@risultato = { pagine: r, mode: :static }
+		@risultato = { pagine: ris, mode: :static }
 	end
 
 	def ricerca_dinamica
@@ -115,9 +116,26 @@ class BeautiForm
 			@driver.navigate.to @url
 		end
 		dynamic_search = DynamicExtractor.new(@driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati, @lista_dropdown)
-		r              = dynamic_search.avvia_ricerca # è una matrice (simulata con hash) rappresentante più ricerche con più pagine
+		# 'ris' è una MATRICE (simulata con HASH) rappresentante più ricerche con più pagine
+		ris        = dynamic_search.avvia_ricerca
 		@driver.quit if must_quit_driver
 		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
-		@risultato = { pagine: r, mode: :dynamic }
+		@risultato = { pagine: ris, mode: :dynamic }
+	end
+
+	def salva_su_file(pagine)
+		if pagine.class == String
+			File.open($dir.to_s + 'file_r_static' + '.html', 'w') do |scrivi|
+				scrivi << pagine
+			end
+		elsif pagine.class == Hash
+			pagine.each { |coordinate, html_source| # coordinate è un array [x,y]
+				numero_ricerca = coordinate[0] # x
+				numero_pagina  = coordinate[1] # y
+				File.open($dir.to_s + 'file_r' + numero_ricerca.to_s + 'p' + numero_pagina.to_s + '.html', 'w') do |scrivi|
+					scrivi << html_source
+				end
+			}
+		end
 	end
 end
