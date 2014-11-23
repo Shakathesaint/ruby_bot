@@ -124,10 +124,12 @@ class BeautiForm
 	end
 
 	def salva_su_file(pagine)
+		# ricerca statica
 		if pagine.class == String
 			File.open($dir.to_s + 'file_r_static' + '.html', 'w') do |scrivi|
 				scrivi << pagine
 			end
+			# ricerca dinamica
 		elsif pagine.class == Hash
 			pagine.each { |coordinate, html_source| # coordinate è un array [x,y]
 				numero_ricerca = coordinate[0] # x

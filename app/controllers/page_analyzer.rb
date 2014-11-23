@@ -2,21 +2,18 @@ require 'nokogiri'
 require 'open-uri'
 
 class PageAnalyzer
-	# $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
-
 	attr_reader :form, :method, :input, :on_submit, :action, :url, :on_click
 
-
-	def initialize (url, campo_dati_xpath)
+	def initialize (url, xpath_campo_dati)
 		@url = url
 		begin
-			@doc = Nokogiri::HTML(open(url))
+			@doc = Nokogiri::HTML(open(@url))
 		rescue => e
 			puts "URL richiesto mal formato -- #{e}"
 			raise
 		end
 
-		@form      = get_form(campo_dati_xpath)
+		@form = get_form(xpath_campo_dati)
 		form_xpath = form[0].path
 
 		@method    = @form[0]['method']
@@ -39,6 +36,7 @@ class PageAnalyzer
 		# input = @doc.xpath("#{form_xpath}/input")
 		# ma così scritto funziona anche con documenti xhtml
 
+		#todo: valutare l'introduzione di una classe Debug (con metodi statici)che gestisce i messaggi di errore e le stampe
 		puts "Numero di elementi <input> trovati: #{@input.length}"
 	end
 
@@ -54,7 +52,7 @@ class PageAnalyzer
 		blocco = @doc.xpath(xpath)
 		#chiamata ricorsiva
 		if blocco[0].nil?
-			raise Nokogiri::XML::SyntaxError, 'L\'xpath del primo campo dati contiene errori di sintassi (non è un xpath valido)'
+			raise 'L\'xpath del primo campo dati non corrisponde a nessun form dell\'URL richiesto'
 		end
 		if blocco[0].name == 'form' # blocco[0].class = Nokogiri::XML::Element
 			blocco # blocco.class = Nokogiri::XML::NodeSet

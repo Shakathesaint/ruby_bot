@@ -81,7 +81,6 @@ class StaticExtractor
 
 	# @return [String] codice HTML della pagina risultato
 	def avvia_ricerca
-		#todo: aggiungere la possibilità di stampare i risultati su file, come per dynamic_extractor
 		if is_get_method?
 			risultato = self.class.get(@action_url, @options)
 		elsif is_post_method?
