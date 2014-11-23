@@ -14,7 +14,7 @@ class PageAnalyzer
 		end
 
 		@form = get_form(xpath_campo_dati)
-		form_xpath = form[0].path
+		form_xpath = @form[0].path
 
 		@method    = @form[0]['method']
 
@@ -91,11 +91,9 @@ class PageAnalyzer
 	end
 
 	def is_static?
-
 		# ATTENZIONE: il submit potrebbe non essere sul primo sottolivello del form, ma anche in livelli successivi
 		# inoltre posso avere anche più elementi input per cui devo controllare in tutti gli input[i]
-
-		if @on_submit.nil? and @on_click.nil?
+		if (@on_submit.nil? or @on_submit == '') and (@on_click.nil? or @on_click == '')
 			@input.each do |elemento|
 				return @static = true if elemento['type'] == 'submit' || elemento['type'] == 'image'
 			end
