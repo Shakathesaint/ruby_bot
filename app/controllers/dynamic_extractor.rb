@@ -1,11 +1,10 @@
-$dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
+# $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
 class DynamicExtractor
 	require 'selenium-webdriver'
 
-	attr_reader :lista_campi_dati
+	# attr_reader :lista_campi_dati, :lista_dropdown
 
-	# def initialize(driver, nomefile_json = "#{$dir}struttura_dati.json")
 	def initialize(driver, next_xpath, marker_fine_pagina, lista_campi_dati, lista_dropdown = nil)
 		@driver          = driver
 		@pagina_iniziale = @driver.current_url # salva la pagina iniziale del browser come pagina di ricerca

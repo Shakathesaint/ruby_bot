@@ -11,17 +11,17 @@ E' la classe che si interfaccia col mondo esterno:
 
 $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
+# @param [Hash] options - import: [percorso del file .json da importare]; force: forza modalità 'static' o 'dynamic'; driver: [passa un driver di Selenium preesistente]
 class BeautiForm
 	attr_reader :risultato
 	require 'selenium-webdriver'
 	require 'json'
-	require '../../app/controllers/page_analyzer'
-	require '../../app/controllers/static_extractor'
-	require '../../app/controllers/dynamic_extractor'
+	require_relative '../../app/controllers/page_analyzer'
+	require_relative '../../app/controllers/static_extractor'
+	require_relative '../../app/controllers/dynamic_extractor'
 
-	# @param [Hash] options import: [percorso del file .json da importare]; force: forza modalità 'static' o 'dynamic'; driver: [passa un driver di Selenium preesistente]
+
 	def initialize(options = {})
-		# def initialize(url, nomefile_json = "#{$dir}struttura_dati.json", mode = nil)
 		nomefile_json = options[:import] ||= "#{$dir}struttura_dati.json"
 		# mode può assumere i valori {force: static} o {force: dynamic},
 		# se lasciato vuoto viene deciso in automatico se lanciare una ricerca statica o dinamica

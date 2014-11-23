@@ -1,17 +1,18 @@
 require 'spec_helper'
 require_relative '../app/controllers/client_simulator'
+require_relative '../app/controllers/beauti_form'
 
 describe ClientSimulator do
 
   describe '#inizialize' do
-    after(:each) do
-      @client.driver.quit
-    end
+    # after(:each) do
+    #   # @client.driver.quit
+    # end
 
     context 'given valid data' do
       it 'crea un driver' do
-        @client = ClientSimulator.new
-        puts defined?(@client).nil?
+        @client = ClientSimulator.new 'about:blank'
+        # puts defined?(@client).nil?
         defined?(@client).should_not be_nil
       end
     end
@@ -21,11 +22,12 @@ describe ClientSimulator do
     before(:all) do
       # cancella tutti i file .json preesistenti
       Dir.glob('./app/controllers/*.json') { |filename| File.delete(filename) }
-      @client = ClientSimulator.new
+      Dir.glob("#{$dir}struttura_dati.json") { |filename| File.delete(filename) }
+      @client = ClientSimulator.new 'about:blank'
     end
-    after(:all) do
-      @client.driver.quit
-    end
+    # after(:all) do
+    #   @client.driver.quit
+    # end
 
     context 'given a parameter' do
       it 'crea un file col nome passato' do
@@ -37,11 +39,13 @@ describe ClientSimulator do
     context 'not given a parameter' do
       it 'crea un file col nome strutturaDati.json' do
         @client.to_file_json
-        File.exist?('./app/controllers/strutturaDati.json').should be true
+        default_dir = $dir
+        File.exist?("#{default_dir}struttura_dati.json").should be true
       end
     end
   end
 
+=begin
   describe '#driver' do
     after(:each) do
       @client.driver.quit
@@ -54,6 +58,7 @@ describe ClientSimulator do
       end
     end
   end
+=end
 
 
 
