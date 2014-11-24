@@ -16,6 +16,7 @@ class BeautiForm
 	attr_reader :risultato, :url, :lista_dropdown, :driver, :marker_fine_pagina, :page, :lista_campi_dati, :next_xpath
 	require 'selenium-webdriver'
 	require 'json'
+	require 'headless'
 	require_relative '../../app/controllers/page_analyzer'
 	require_relative '../../app/controllers/static_extractor'
 	require_relative '../../app/controllers/dynamic_extractor'
@@ -23,11 +24,14 @@ class BeautiForm
 
 	def initialize(options = {})
 		nomefile_json = options[:import] ||= "#{$dir}struttura_dati.json"
-		# mode può assumere i valori {force: static} o {force: dynamic},
+		# mode può assumere i valori {force: :static} o {force: :dynamic},
 		# se lasciato vuoto viene deciso in automatico se lanciare una ricerca statica o dinamica
 		mode          = options[:force] ||= nil
 		# il driver può essere passato come parametro alla classe o creato dal metodo ricerca_dinamica
-		@driver = options[:driver] ||= nil
+		@driver                = options[:driver] ||= nil
+		# la modalità silenziosa prevede l'utilizzo della libreria Headless per la modalità dinamica
+		# che evita la visualizzazione a schermo delle operazioni effettuate dal browser
+		@esecuzione_silenziosa = options[:silent] ||= nil
 
 		File.open(nomefile_json, 'r') do |leggi|
 			@struttura_dati = JSON.parse(leggi.gets) # gets legge una stringa dal file
@@ -111,14 +115,25 @@ class BeautiForm
 	def ricerca_dinamica
 		# se il driver non è stato passato come parametro alla creazione dell'istanza di BeautiForm lo creo io
 		if @driver == nil
+			### apertura del driver ###
+			if @esecuzione_silenziosa
+				@headless = Headless.new
+				@headless.start
+			end
 			must_quit_driver = true
 			@driver          = Selenium::WebDriver.for :firefox
 			@driver.navigate.to @url
+			###########################
 		end
 		dynamic_search = DynamicExtractor.new(@driver, @next_xpath, @marker_fine_pagina, @lista_campi_dati, @lista_dropdown)
 		# 'ris' è una MATRICE (simulata con HASH) rappresentante più ricerche con più pagine
-		ris        = dynamic_search.avvia_ricerca
+		ris = dynamic_search.avvia_ricerca
+
+		### chiusura del driver ###
 		@driver.quit if must_quit_driver
+		@headless.destroy unless @headless.nil?
+		###########################
+
 		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
 		@risultato = { pagine: ris, mode: :dynamic }
 	end

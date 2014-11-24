@@ -7,7 +7,7 @@ require_relative '../app/controllers/beauti_form'
 
 describe DynamicExtractor do
   before(:each) do
-    #todo: si potrebbe aggiungere la ricerca in background come opzione in beautiform
+    #todo: si potrebbe aggiungere la ricerca in background come opzione in BeautiForm
     # @headless = Headless.new
     # @headless.start
   end
