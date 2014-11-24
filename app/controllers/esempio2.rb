@@ -14,7 +14,7 @@ drop1             = { '//*[@id="searchDropdownBox"]' => 'Abbigliamento' }
 client.add_ricerca r1 #, drop1
 client.to_file_json
 
-seeker = BeautiForm.new force: 'dynamic'
+seeker = BeautiForm.new force: :dynamic
 
 puts '====== CODICE HTML ======'
 puts seeker.risultato[:pagine]

@@ -13,7 +13,7 @@ $dir = '/home/leinad/RubymineProjects/ruby_bot/bot_testing/'
 
 # @param [Hash] options - import: [percorso del file .json da importare]; force: forza modalità 'static' o 'dynamic'; driver: [passa un driver di Selenium preesistente]
 class BeautiForm
-	attr_reader :risultato
+	attr_reader :risultato, :url, :lista_dropdown, :driver, :marker_fine_pagina, :page, :lista_campi_dati, :next_xpath
 	require 'selenium-webdriver'
 	require 'json'
 	require_relative '../../app/controllers/page_analyzer'
@@ -84,9 +84,9 @@ class BeautiForm
 		@page = PageAnalyzer.new(@url, xpath_primo_campo)
 
 		case mode
-			when 'static'
+			when :static
 				ricerca_statica
-			when 'dynamic'
+			when :dynamic
 				ricerca_dinamica
 			else # comportamento di default (se non viene forzata una modalità)
 				if @page.is_static?

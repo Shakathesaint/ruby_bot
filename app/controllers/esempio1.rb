@@ -19,7 +19,7 @@ client.to_file_json
 
 driver = Selenium::WebDriver.for :firefox
 driver.navigate.to 'http://www.fnovi.it/index.php?pagina=ricerca-iscritti'
-seeker = BeautiForm.new driver: driver, force: 'dynamic'
+seeker = BeautiForm.new driver: driver, force: :dynamic
 
 puts '====== CODICE HTML ======'
 puts seeker.risultato[:pagine]

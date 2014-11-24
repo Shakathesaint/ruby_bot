@@ -7,49 +7,13 @@ require_relative '../app/controllers/beauti_form'
 
 describe DynamicExtractor do
   before(:each) do
+    #todo: si potrebbe aggiungere la ricerca in background come opzione in beautiform
     # @headless = Headless.new
     # @headless.start
   end
   after(:each) do
     # @headless.destroy
   end
-
-  #todo: la verifica della correttezza del file .json va spostata tra i test di BeautiForm
-  # describe '#inizialize' do
-  #   before(:all) do
-  #     client = ClientSimulator.new 'http://www.google.it'
-  #   end
-  # 
-  #   context 'given a valid .json file' do
-  # 
-  #     it 'crea @struttura_dati coerente con il file .json passato come parametro' do
-  #       #############################################
-  #       # crea una struttura dati con ClientSimulator
-  #       next_xpath = '//*[@title="Vai alla pagina successiva"]'
-  #       page_loaded_xpath = '//*[@id="pager"]'
-  #       client.next_xpath = next_xpath
-  #       client.page_loaded_xpath = page_loaded_xpath
-  #       r1 = {'//*[@id="searchField"]' => 'Bianchi'}
-  #       d1 = {'//*[@id="ordine"]' => 'ROMA'}
-  #       r2 = {'//*[@id="searchField"]' => 'Verdi'}
-  #       client.add_ricerca r1, d1
-  #       client.add_ricerca r2
-  #       client.to_file_json
-  #       #############################################
-  #       
-  #       driver = Selenium::WebDriver.for :firefox
-  #       
-  #       extr = DynamicExtractor.new driver, next_xpath, page_loaded_xpath, 
-  # 
-  #       extr.struttura_dati[0].should be == next_xpath
-  #       extr.struttura_dati[1].should be == page_loaded_xpath
-  #       extr.lista_campi_dati[0].should be == {"//*[@id=\"searchField\"]" => "Bianchi"}
-  #       extr.lista_campi_dati[1].should be == {"//*[@id=\"searchField\"]" => "Verdi"}
-  #     end
-  # 
-  #   end
-  # 
-  # end
 
   describe '#avvia_ricerca' do
 
@@ -68,10 +32,10 @@ describe DynamicExtractor do
       it 'esegue una ricerca singola su Amazon' do
         @client.to_file_json
 
-        seeker = BeautiForm.new force: 'dynamic'
+        seeker = BeautiForm.new force: :dynamic
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
-        # seeker.salva_su_file pagine
+        seeker.salva_su_file pagine
         pagine[[0, 0]].should_not be_nil
         pagine[[1, 0]].should be_nil
         mode.should be == :dynamic
@@ -83,9 +47,10 @@ describe DynamicExtractor do
 
         @client.to_file_json
 
-        seeker = BeautiForm.new force: 'dynamic'
+        seeker = BeautiForm.new force: :dynamic
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
+        seeker.salva_su_file pagine
         pagine[[0, 0]].should_not be_nil
         pagine[[1, 0]].should_not be_nil
         pagine[[2, 0]].should be_nil
@@ -109,7 +74,7 @@ describe DynamicExtractor do
       it 'esegue una ricerca singola su Fnovi' do
         @client.to_file_json
 
-        seeker = BeautiForm.new force: 'dynamic'
+        seeker = BeautiForm.new force: :dynamic
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
         pagine[[0, 0]].should_not be_nil
@@ -122,7 +87,7 @@ describe DynamicExtractor do
         @client.add_ricerca r2
         @client.to_file_json
 
-        seeker = BeautiForm.new force: 'dynamic'
+        seeker = BeautiForm.new force: :dynamic
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
         pagine[[0, 0]].should_not be_nil
@@ -148,7 +113,7 @@ describe DynamicExtractor do
       it 'esegue una ricerca singola su PagineBianche' do
         @client.to_file_json
 
-        seeker = BeautiForm.new force: 'dynamic'
+        seeker = BeautiForm.new force: :dynamic
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
         pagine[[0, 0]].should_not be_nil
@@ -161,7 +126,7 @@ describe DynamicExtractor do
         @client.add_ricerca r2
         @client.to_file_json
 
-        seeker = BeautiForm.new force: 'dynamic'
+        seeker = BeautiForm.new force: :dynamic
         pagine = seeker.risultato[:pagine]
         mode   = seeker.risultato[:mode]
         pagine[[0, 0]].should_not be_nil

@@ -6,10 +6,10 @@ require_relative '../app/controllers/beauti_form'
 
 describe StaticExtractor do
 
-	describe '#compila_parametri' do
-		xit 'should do something' do
-		end
-	end
+	# describe '#compila_parametri' do
+	# 	xit 'should do something' do
+	# 	end
+	# end
 
 	describe '#avvia_ricerca' do
 		context 'given an Amazon search request' do
@@ -27,10 +27,11 @@ describe StaticExtractor do
 			it 'esegue una ricerca singola su Amazon' do
 				@client.to_file_json
 
-				seeker = BeautiForm.new force: 'static'
+				seeker = BeautiForm.new force: :static
 				pagine = seeker.risultato[:pagine]
 				# seeker.salva_su_file pagine
 				mode   = seeker.risultato[:mode]
+				seeker.salva_su_file pagine
 				pagine.should_not be_nil
 				pagine.size.should be > 10 # una pagina HTML si presume abbia più di 10 byte/caratteri
 				mode.should be == :static
@@ -52,7 +53,7 @@ describe StaticExtractor do
 			it 'esegue una ricerca singola su Fnovi' do
 				@client.to_file_json
 
-				seeker = BeautiForm.new force: 'static'
+				seeker = BeautiForm.new force: :static
 				pagine = seeker.risultato[:pagine]
 				# seeker.salva_su_file pagine
 				mode   = seeker.risultato[:mode]
@@ -62,9 +63,9 @@ describe StaticExtractor do
 			end
 		end
 
-		describe '#xpath_to_html' do
-			xit 'should do something' do
-			end
-		end
+		# describe '#xpath_to_html' do
+		# 	xit 'should do something' do
+		# 	end
+		# end
 	end
 end
