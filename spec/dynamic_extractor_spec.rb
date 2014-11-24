@@ -135,6 +135,47 @@ describe DynamicExtractor do
         mode.should be == :dynamic
       end
     end
+
+    context 'given an Ebay search request' do
+      before(:each) do
+        next_xpath        = '//*[@id="Pagination"]/tbody/tr/td[3]/a' # xpath del tasto next
+        page_loaded_xpath = '//*[@id=\'gf-t-box\']/table/tbody/tr[2]/td/div' # marker di fine pagina - garantisce che la pagina ha terminato il caricamento
+        r1                = { '//*[@id="gh-ac"]' => 'caldaia extra' }
+
+        @client                   = ClientSimulator.new 'http://www.ebay.it/'
+        @client.next_xpath        = next_xpath
+        @client.page_loaded_xpath = page_loaded_xpath
+        @client.add_ricerca r1
+      end
+
+      it 'esegue una ricerca singola su Ebay' do
+        @client.to_file_json
+
+        seeker = BeautiForm.new force: :dynamic
+        pagine = seeker.risultato[:pagine]
+        mode   = seeker.risultato[:mode]
+        seeker.salva_su_file pagine
+        pagine[[0, 0]].should_not be_nil
+        pagine[[1, 0]].should be_nil
+        mode.should be == :dynamic
+      end
+
+      it 'esegue una ricerca multipla su Ebay' do
+        r2 = { '//*[@id="gh-ac"]' => 'mortaio ottone' }
+        @client.add_ricerca r2
+
+        @client.to_file_json
+
+        seeker = BeautiForm.new force: :dynamic
+        pagine = seeker.risultato[:pagine]
+        mode   = seeker.risultato[:mode]
+        seeker.salva_su_file pagine
+        pagine[[0, 0]].should_not be_nil
+        pagine[[1, 0]].should_not be_nil
+        pagine[[2, 0]].should be_nil
+        mode.should be == :dynamic
+      end
+    end
   end
 
   describe '#click' do

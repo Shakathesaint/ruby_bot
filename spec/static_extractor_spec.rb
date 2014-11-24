@@ -63,6 +63,32 @@ describe StaticExtractor do
 			end
 		end
 
+		context 'given an Ebay search request' do
+			before(:each) do
+				next_xpath        = '//*[@id="Pagination"]/tbody/tr/td[3]/a' # xpath del tasto next
+				page_loaded_xpath = '//*[@id=\'gf-t-box\']/table/tbody/tr[2]/td/div' # marker di fine pagina - garantisce che la pagina ha terminato il caricamento
+				r1                = { '//*[@id="gh-ac"]' => 'caldaia extra' }
+
+				@client                   = ClientSimulator.new 'http://www.ebay.it/'
+				@client.next_xpath        = next_xpath
+				@client.page_loaded_xpath = page_loaded_xpath
+				@client.add_ricerca r1
+			end
+
+			it 'esegue una ricerca singola su Ebay' do
+				@client.to_file_json
+
+				seeker = BeautiForm.new force: :static
+				pagine = seeker.risultato[:pagine]
+				seeker.salva_su_file pagine
+				mode = seeker.risultato[:mode]
+				seeker.salva_su_file pagine
+				pagine.should_not be_nil
+				pagine.size.should be > 10 # una pagina HTML si presume abbia più di 10 byte/caratteri
+				mode.should be == :static
+			end
+		end
+
 		# describe '#xpath_to_html' do
 		# 	xit 'should do something' do
 		# 	end
