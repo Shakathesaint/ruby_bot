@@ -36,4 +36,45 @@ describe BeautiForm do
 			end
 		end
 	end
+
+	describe '#ricerca_statica' do
+		context 'given a URL with a static search' do
+			it 'esegue una ricerca STATICA' do
+				client                   = ClientSimulator.new 'http://www.amazon.it'
+				client.next_xpath        = '//*[@id="pagnNextLink"]'
+				client.page_loaded_xpath = '//*[@id="pagnNextString"]'
+				r1                       = { '//*[@id="twotabsearchtextbox"]' => 'asus g750jx' }
+				drop1                    = { '//*[@id="searchDropdownBox"]' => 'Abbigliamento' } # menu a tendina
+				client.add_ricerca r1, drop1
+				client.to_file_json
+
+				seeker   = BeautiForm.new
+				pagine   = seeker.risultato[:pagine]
+				modalita = seeker.risultato[:mode]
+
+				pagine.should_not be_nil
+				modalita.should be == :static
+			end
+		end
+	end
+
+	describe '#ricerca_dinamica' do
+		context 'given a URL with a dynamic search' do
+			it 'esegue una ricerca DINAMICA' do
+				client            = ClientSimulator.new 'http://www.paginebianche.it/'
+				client.next_xpath = '//*[@class="listing-pag-n listing-pag-succ"]'
+				r1                = { :'//*[@id="input_cosa"]' => 'De Amicis',
+				                      :'//*[@id="input_dove"]' => 'Roma' }
+				client.add_ricerca r1
+				client.to_file_json
+
+				seeker   = BeautiForm.new
+				pagine   = seeker.risultato[:pagine]
+				modalita = seeker.risultato[:mode]
+
+				pagine[[0, 0]].should_not be_nil
+				modalita.should be == :dynamic
+			end
+		end
+	end
 end
