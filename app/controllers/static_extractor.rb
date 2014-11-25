@@ -93,6 +93,14 @@ class StaticExtractor
 		risultato.to_s
 	end
 
+	def scorri_pagine(prima_pagina)
+		page = PageAnalyzer(prima_pagina)
+		page.get_element_by_xpath(next_xpath) # next_xpath passato da beautiform
+		## salva pagina ##
+		## nuova_pagina = goto link puntato dal tasto next (se ha un link)
+		scorri_pagine(nuova_pagina)
+	end
+
 
 	#
 	# prende un hash deve le key sono xpath e restituisce un hash dove le key sono il codice html corrispondente a quell'xpath
