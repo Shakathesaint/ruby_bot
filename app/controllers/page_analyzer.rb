@@ -4,14 +4,20 @@ require 'open-uri'
 class PageAnalyzer
 	attr_reader :form, :method, :input, :on_submit, :action, :url, :on_click
 
-	def initialize (url, xpath_campo_dati)
+	def initialize (url, xpath_campo_dati = nil, html_code = nil)
 		@url = url
 		begin
-			@doc = Nokogiri::HTML(open(@url))
+			if xpath_campo_dati.nil?
+				@doc = Nokogiri::HTML(html_code)
+			else
+				@doc = Nokogiri::HTML(open(@url))
+			end
 		rescue => e
 			puts "URL richiesto mal formato -- #{e}"
 			raise
 		end
+
+		return if xpath_campo_dati.nil? # non mi interessa l'analisi del form in questo caso perciò non proseguo
 
 		@form = get_form(xpath_campo_dati)
 		form_xpath = @form[0].path

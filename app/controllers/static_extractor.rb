@@ -1,12 +1,14 @@
 class StaticExtractor
 	require 'httparty'
 	include HTTParty
+	require_relative '../../app/controllers/page_analyzer'
 
 	# @param [PageAnalyzer] page
 	# @param [Hash] lista_campi_dati
 	# @param [Hash] lista_dropdown
-	def initialize (page, lista_campi_dati, lista_dropdown = nil)
+	def initialize (page, lista_campi_dati, next_xpath, lista_dropdown = nil)
 		@page       = page
+		@next_xpath = next_xpath
 		@action_url = page.action # attributo 'action' dell'elemento <input>: contiene l'url della pagina cui inviare la GET/POST
 		# alcune pagine hanno una 'action' con un url parziale, in quel caso richiamiamo il metodo base_uri di HTTParty
 		# che setta un url di base cui viene 'appesa' la stringa contenuta nell'action
@@ -90,15 +92,19 @@ class StaticExtractor
 			puts 'attributo method non presente - tentativo di lanciare una get'
 			risultato = self.class.get(@action_url, @options)
 		end
-		risultato.to_s
+		r = risultato.to_s
+		scorri_pagine(r)
 	end
 
 	def scorri_pagine(prima_pagina)
-		page = PageAnalyzer(prima_pagina)
-		page.get_element_by_xpath(next_xpath) # next_xpath passato da beautiform
+		page           = PageAnalyzer.new nil, nil, prima_pagina
+		next_button    = page.get_element_by_xpath(@next_xpath) # next_xpath passato da beautiform
+		link_next_page = next_button[0]['href']
+		unless link_next_page.nil?
 		## salva pagina ##
 		## nuova_pagina = goto link puntato dal tasto next (se ha un link)
-		scorri_pagine(nuova_pagina)
+			scorri_pagine(link_next_page)
+		end
 	end
 
 

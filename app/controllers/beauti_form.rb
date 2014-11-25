@@ -44,7 +44,6 @@ class BeautiForm
 		################  USATE SOLO DALLA RICERCA DINAMICA  #######################################################
 		@next_xpath         = @struttura_dati['next_xpath']
 
-
 		# @marker_fine_pagina deve essere un elemento che garantisce che la pagina sia stata caricata completamente.
 		# Non esiste infatti in Selenium un metodo per garantire che una pagina abbia completato il caricamento.
 		# E' consigliato evitare un elemento funzionalmente collegato alla ricerca perché potrebbe non apparire
@@ -105,7 +104,7 @@ class BeautiForm
 		# nella ricerca statica viene effettuata una sola ricerca (la prima)
 		#todo: pensare se esiste un tipo di dato migliore per rappresentare il risultato della ricerca statica
 		#todo: si può introdurre un ciclo per fare più ricerche consecutive (il risultato però sarà sempre solo la prima pagina)
-		static_search = StaticExtractor.new(@page, @lista_campi_dati[0], @lista_dropdown[0])
+		static_search = StaticExtractor.new(@page, @lista_campi_dati[0], @next_xpath, @lista_dropdown[0])
 		# 'ris' è una STRINGA rappresentante una singola pagina HTML
 		ris        = static_search.avvia_ricerca
 		# il risultato della ricerca prevede una chiave 'mode' che da indicazioni sul metodo che è stato utilizzato
